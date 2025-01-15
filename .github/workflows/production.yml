@@ -1,4 +1,5 @@
-name: Run UAT Stage
+# production stage deployment workflow after successful
+name: Run Production Stage
 
 on:
   #todo : make it a cron job that runs every n hours
@@ -15,7 +16,7 @@ on:
           required: true
 
 jobs:
-  run-uat-deploy:
+  run-production-deploy:
     uses: ./.github/workflows/release-stage.yml
     secrets: inherit
     with:
