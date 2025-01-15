@@ -19,6 +19,12 @@ jobs:
           CYPRESS_TEST_USER_EMAIL: ${{ secrets.CYPRESS_TEST_USER_EMAIL }}
           CYPRESS_TEST_USER_TOKEN: ${{ secrets.CYPRESS_TEST_USER_TOKEN }}
 
+      - name: Zip results
+        if: failure()
+        uses: montudor/action-zip@v1
+        with:
+          args: zip -qq -r cypress.zip cypress
+
       - name: Send email on failure
         if: failure()
         uses: dawidd6/action-send-mail@v4
@@ -32,4 +38,4 @@ jobs:
           to: ${{secrets.MAIL_SLACK_CHANNEL}}
           from: GitHub Actions
           body: Smoke tests ${{github.repository}} failed!
-          attachments: ./cypress/screenshots/*
+          attachments: ./cypress.zip
