@@ -13,7 +13,6 @@ jobs:
         uses: actions/checkout@v4
 
       - name: Cypress run in env
-        id: cypress
         uses: cypress-io/github-action@v6
         env:
           CYPRESS_host: http://${{ inputs.EB_ENV }}.${{ secrets.AWS_REGION }}.elasticbeanstalk.com
@@ -22,7 +21,7 @@ jobs:
 
       - name: Zip results
         id: cypress_results_zip
-        if: steps.cypress.outcome == 'failure'
+        if: failure()
         uses: montudor/action-zip@v1
         with:
           args: zip -qq -r cypress.zip cypress
