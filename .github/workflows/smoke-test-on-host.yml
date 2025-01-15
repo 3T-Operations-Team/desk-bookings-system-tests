@@ -2,21 +2,34 @@ name: Run Smoke Test on this Host
 on:
   workflow_call:
     inputs:
-       EB_ENV:
-         required: true
-         type: string
+      EB_ENV:
+        required: true
+        type: string
 jobs:
   run-smoke:
     runs-on: ubuntu-latest
     steps:
-       - name: Checkout this
-         uses: actions/checkout@v4
+      - name: Checkout this
+        uses: actions/checkout@v4
 
-       - name: Cypress run in env
-         uses: cypress-io/github-action@v6
-         env:
+      - name: Cypress run in env
+        uses: cypress-io/github-action@v6
+        env:
           CYPRESS_host: http://${{ inputs.EB_ENV }}.${{ secrets.AWS_REGION }}.elasticbeanstalk.com
           CYPRESS_TEST_USER_EMAIL: ${{ secrets.CYPRESS_TEST_USER_EMAIL }}
           CYPRESS_TEST_USER_TOKEN: ${{ secrets.CYPRESS_TEST_USER_TOKEN }}
 
-  
+      - name: Send email on failure
+        if: failure()
+        uses: dawidd6/action-send-mail@v4
+        with:
+          server_address: ${{secrets.MAIL_SERVER}}
+          server_port: 465
+          secure: true
+          username: ${{secrets.MAIL_USERNAME}}
+          password: ${{secrets.MAIL_PASSWORD}}
+          subject: Smoke tests failed
+          to: ${{secrets.MAIL_SLACK_CHANNEL}}
+          from: GitHub Actions
+          body: Smoke tests ${{github.repository}} failed!
+          attachments: ./cypress/screenshots/*
