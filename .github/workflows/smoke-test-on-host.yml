@@ -26,7 +26,7 @@ jobs:
           args: zip -qq -r cypress.zip cypress
 
       - name: Send email on failure
-        if: success()
+        if: failure()
         uses: dawidd6/action-send-mail@v4
         with:
           server_address: ${{secrets.MAIL_SERVER}}
