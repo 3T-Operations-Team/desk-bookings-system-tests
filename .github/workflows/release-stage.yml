@@ -4,31 +4,41 @@
 
 name: Release Stage
 on:
-  workflow_dispatch:
+  workflow_call:
+    inputs:
+      EB_APP:
+        type: string
+        required: true
+      EB_ENV_FE:
+        type: string
+        required: true
+      EB_ENV_BE:
+        type: string
+        required: true
+      
 jobs:
   # TODO : add environment here?
   run-backend-deploy:
     uses: 3T-Operations-Team/desk-bookings-be/.github/workflows/deploy.yml@master
     secrets: inherit
     with:
-      EB_ENVIRONMENT: ${{ vars.EB_UAT_ENV_BE }}
-      EB_APP: ${{ vars.EB_UAT_APP }}
-      IMAGE_PATH: ${{ vars.IMAGE_PATH_BE }}:master
+      EB_ENVIRONMENT: ${{ inputs.EB_ENV_BE }}
+      EB_APP: ${{ inputs.EB_APP }}
+      IMAGE_PATH: ${{ vars.IMAGE_PATH_BE }}:master # this never changes.
 
   run-frontend-deploy:
     needs: run-backend-deploy
     uses: 3T-Operations-Team/desk-bookings-fe/.github/workflows/deploy.yml@main
     secrets: inherit
     with:
-      EB_ENVIRONMENT: ${{ vars.EB_UAT_ENV_FE }}
-      EB_APP: ${{ vars.EB_UAT_APP }}
+      EB_ENVIRONMENT: ${{ inputs.EB_ENV_FE }}
+      EB_APP: ${{ inputs.EB_APP }}
       IMAGE_PATH: ${{ vars.IMAGE_PATH_FE }}:main
   # todo: checkout to test before running smoke test or move run-smoke-test yml to that repo
   run-smoke-test:
     needs:
-      - run-backend-deploy
       - run-frontend-deploy
     uses: 3T-Operations-Team/desk-bookings-system-tests/.github/workflows/smoke-test-on-host.yml@main
     with:
-      EB_ENV: ${{ vars.EB_UAT_ENV_FE }}
+      EB_ENV : ${{ inputs.EB_ENV_FE }}
     secrets: inherit
