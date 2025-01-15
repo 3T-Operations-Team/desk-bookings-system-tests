@@ -1,0 +1,22 @@
+name: Run Smoke Test on this Host
+on:
+  workflow_call:
+    inputs:
+       EB_ENV:
+         required: true
+         type: string
+jobs:
+  run-smoke:
+    runs-on: ubuntu-latest
+    steps:
+       - name: Checkout this
+         uses: actions/checkout@v4
+
+       - name: Cypress run in env
+         uses: cypress-io/github-action@v6
+         env:
+          CYPRESS_host: http://${{ inputs.EB_ENV }}.${{ secrets.AWS_REGION }}.elasticbeanstalk.com
+          CYPRESS_TEST_USER_EMAIL: ${{ secrets.CYPRESS_TEST_USER_EMAIL }}
+          CYPRESS_TEST_USER_TOKEN: ${{ secrets.CYPRESS_TEST_USER_TOKEN }}
+
+  

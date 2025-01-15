@@ -1,0 +1,17 @@
+# production stage deployment workflow after successful
+# release stage candidate is create from main release-stage
+#    Configure Environment
+#    Release System - reuse from release stage
+#    Checkout System Test Repository
+#    Run Smoke Tests
+
+name: Production stage
+on:
+  workflow_dispatch:
+
+jobs:
+  hello:
+    runs-on: ubuntu-22.04
+    steps:
+      - name: I am up
+        run: echo "Hello I am up";
