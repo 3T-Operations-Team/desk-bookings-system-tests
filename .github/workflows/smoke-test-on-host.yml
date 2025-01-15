@@ -30,12 +30,10 @@ jobs:
         uses: dawidd6/action-send-mail@v4
         with:
           server_address: ${{secrets.MAIL_SERVER}}
-          server_port: 465
           secure: true
           username: ${{secrets.MAIL_USERNAME}}
           password: ${{secrets.MAIL_PASSWORD}}
-          subject: Smoke tests failed
+          subject: Smoke tests failed - ${{ inputs.EB_ENV }}
           to: ${{secrets.MAIL_SLACK_CHANNEL}}
           from: GitHub Actions
-          body: Smoke tests ${{github.repository}} failed!
           attachments: ./cypress.zip
