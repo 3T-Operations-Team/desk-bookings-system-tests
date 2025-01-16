@@ -24,7 +24,7 @@ jobs:
     with:
       EB_ENVIRONMENT: ${{ inputs.EB_ENV_BE }}
       EB_APP: ${{ inputs.EB_APP }}
-      IMAGE_PATH: ${{ vars.IMAGE_PATH_BE }}:master # this never changes.
+      IMAGE_PATH: ${{ vars.IMAGE_PATH_BE }}:latest # this never changes.
 
   run-frontend-deploy:
     needs: run-backend-deploy
