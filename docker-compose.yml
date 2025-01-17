@@ -1,9 +1,28 @@
 services:
+  traefik:
+    image: traefik:latest
+    container_name: traefik
+    command:
+      - "--api.insecure=true"
+      - "--providers.docker=true"
+      - "--entrypoints.web.address=:80"
+      - "--entrypoints.websecure.address=:443"
+    ports:
+      - "80:80"
+      - "443:443"
+      - "6060:8080"
+    volumes:
+      - "/var/run/docker.sock:/var/run/docker.sock"
+
   sendgrid-mock:
     image: ghashange/sendgrid-mock:1.12.0
     container_name: sendgrid-mock
     ports:
       - "3000:3000"
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.api-sendgrid.rule=Host(`api.sendgrid.com`) && PathPrefix(`/v3`)"
+      - "traefik.http.services.api-sendgrid.loadbalancer.server.port=3000"
 
   mongodb:
     image: mongo:latest
@@ -14,6 +33,8 @@ services:
   mongo-seed:
     build: ./mongo-seed
     container_name: mongo-seed
+    environment:
+      MONGO_DBNAME: "cicd"
     depends_on:
       - mongodb
     links:
@@ -28,11 +49,15 @@ services:
       - mongodb
       - sendgrid-mock
       - mongo-seed
+      - traefik
     environment:
       MONGO_URL: mongodb://mongodb:27017
+      SENDGRID_KEY: "key"
+      MONGO_DBNAME: "cicd"
     links:
       - mongodb
       - sendgrid-mock
+      - traefik
 
   frontend:
     image: desk-bookings-fe:latest
