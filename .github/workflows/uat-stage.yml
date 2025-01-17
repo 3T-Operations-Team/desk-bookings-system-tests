@@ -3,22 +3,13 @@ name: Run UAT Stage
 on:
   #todo : make it a cron job that runs every n hours
   workflow_dispatch:
-      inputs:
-        EB_APP:
-          type: string
-          required: true
-        EB_ENV_FE:
-          type: string
-          required: true
-        EB_ENV_BE:
-          type: string
-          required: true
 
 jobs:
   run-uat-deploy:
     uses: ./.github/workflows/release-stage.yml
     secrets: inherit
     with:
-      EB_APP: ${{ inputs.EB_APP }}
-      EB_ENV_FE: ${{ inputs.EB_ENV_FE }}
-      EB_ENV_BE: ${{ inputs.EB_ENV_BE }}
+      EB_APP_BE: ${{ vars.EB_UAT_APP }}
+      EB_APP_FE: ${{ vars.EB_UAT_APP }}
+      EB_ENV_FE: ${{ vars.EB_UAT_ENV_FE }}
+      EB_ENV_BE: ${{ vars.EB_UAT_ENV_BE }}
