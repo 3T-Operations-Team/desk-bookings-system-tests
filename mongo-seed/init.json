@@ -1,0 +1,8 @@
+[
+  {
+    "username": "test@example.com",
+    "password": "{noop}123",
+    "authorities": [],
+    "_class": "com.example.doesnotexist.desk_bookings_server.model.User"
+  }
+]

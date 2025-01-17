@@ -1,8 +1,41 @@
-version: "3.8"
-
 services:
+  sendgrid-mock:
+    image: ghashange/sendgrid-mock:1.12.0
+    container_name: sendgrid-mock
+    ports:
+      - "3000:3000"
+
+  mongodb:
+    image: mongo:latest
+    container_name: mongodb
+    ports:
+      - "27017:27017"
+
+  mongo-seed:
+    build: ./mongo-seed
+    container_name: mongo-seed
+    depends_on:
+      - mongodb
+    links:
+      - mongodb
+
+  backend:
+    image: desk-bookings-be:latest
+    container_name: backend
+    ports:
+      - "8080:8080"
+    depends_on:
+      - mongodb
+      - sendgrid-mock
+      - mongo-seed
+    environment:
+      MONGO_URL: mongodb://mongodb:27017
+    links:
+      - mongodb
+      - sendgrid-mock
+
   frontend:
-    image: desk-bookings-frontend:latest
+    image: desk-bookings-fe:latest
     container_name: frontend
     ports:
       - "7070:8080"
@@ -10,30 +43,3 @@ services:
       - backend
     environment:
       BACKEND_ADDRESS: http://backend:8080
-
-  backend:
-    image: desk-bookings-backend:latest
-    container_name: backend
-    ports:
-      - "8080:8080"
-    depends_on:
-      - mongo
-      - wiremock
-    environment:
-      MONGO_URL: mongodb://mongo:27017
-      WIREMOCK_URL: http://wiremock:3000
-    links:
-      - mongo
-      - wiremock
-
-  mongo:
-    image: mongo:6.0
-    container_name: mongo
-    ports:
-      - "27017:27017"
-
-  wiremock:
-    image: wiremock/wiremock:latest
-    container_name: wiremock
-    ports:
-      - "3000:3000"
