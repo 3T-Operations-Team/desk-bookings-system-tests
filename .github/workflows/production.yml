@@ -4,22 +4,13 @@ name: Run Production Stage
 on:
   #todo : make it a cron job that runs every n hours
   workflow_dispatch:
-      inputs:
-        EB_APP:
-          type: string
-          required: true
-        EB_ENV_FE:
-          type: string
-          required: true
-        EB_ENV_BE:
-          type: string
-          required: true
 
 jobs:
   run-production-deploy:
     uses: ./.github/workflows/release-stage.yml
     secrets: inherit
     with:
-      EB_APP: ${{ inputs.EB_APP }}
-      EB_ENV_FE: ${{ inputs.EB_ENV_FE }}
-      EB_ENV_BE: ${{ inputs.EB_ENV_BE }}
+      EB_APP_FE: ${{ vars.EB_APP_FE }}
+      EB_APP_BE: ${{ vars.EB_APP_BE }}
+      EB_ENV_FE: ${{ vars.EB_ENV_PROD_FE }}
+      EB_ENV_BE: ${{ vars.EB_ENV_PROD_BE }}
