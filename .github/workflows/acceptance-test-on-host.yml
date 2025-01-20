@@ -1,0 +1,17 @@
+name: Run Acceptance Test on this Host
+on:
+  workflow_call:
+    inputs:
+      EB_ENV:
+        required: true
+        type: string
+  jobs:
+    run-acceptance:
+      runs-on: ubuntu-22.04
+      steps:
+        - name: Checkout this
+          uses: actions/checkout@v4
+          with:
+            repository: 3T-Operations-Team/desk-bookings-system-tests
+            path: desk-bookings-system-tests
+
