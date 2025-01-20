@@ -5,7 +5,7 @@ on:
       EB_ENV:
         required: true
         type: string
-  jobs:
+jobs:
     run-acceptance:
       runs-on: ubuntu-22.04
       steps:
