@@ -25,6 +25,13 @@ jobs:
         with:
           working-directory: desk-bookings-system-tests
 
+      - name: upload screenshot
+        uses: actions/upload-artifact@v3
+        if: failure()
+        with:
+          name: cypress-screenshots
+          path: desk-bookings-system-tests/cypress/screenshots
+
       - name: Zip results
         if: failure()
         uses: montudor/action-zip@v1
