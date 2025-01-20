@@ -1,7 +1,9 @@
 {
   "type": "module",
   "scripts": {
-    "test-cypress": "cypress run"
+    "test-cypress": "cypress run",
+    "test": "vitest --watch=false",
+    "test-coverage": "vitest --coverage --watch=false"
   },
   "dependencies": {
     "@badeball/cypress-cucumber-preprocessor": "^21.0.3",
