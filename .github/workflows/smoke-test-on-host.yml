@@ -11,21 +11,27 @@ jobs:
     steps:
       - name: Checkout this
         uses: actions/checkout@v4
+        with:
+          repository: 3T-Operations-Team/desk-bookings-system-tests
+          path: desk-bookings-system-tests
 
       - name: Cypress run in env
         uses: cypress-io/github-action@v6
+        working-directory: desk-bookings-system-tests
         env:
           CYPRESS_host: http://${{ inputs.EB_ENV }}.${{ secrets.AWS_REGION }}.elasticbeanstalk.com
           CYPRESS_TEST_USER_EMAIL: ${{ secrets.CYPRESS_TEST_USER_EMAIL }}
           CYPRESS_TEST_USER_TOKEN: ${{ secrets.CYPRESS_TEST_USER_TOKEN }}
 
       - name: Zip results
+        working-directory: desk-bookings-system-tests
         if: failure()
         uses: montudor/action-zip@v1
         with:
           args: zip -qq -r cypress.zip cypress
 
       - name: Send email on failure
+        working-directory: desk-bookings-system-tests
         if: failure()
         uses: dawidd6/action-send-mail@v4
         with:
