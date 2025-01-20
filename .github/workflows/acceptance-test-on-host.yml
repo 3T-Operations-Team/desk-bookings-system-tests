@@ -22,7 +22,7 @@ on:
             CYPRESS_TEST_USER_EMAIL: ${{ secrets.CYPRESS_TEST_USER_EMAIL }}
             CYPRESS_TEST_USER_TOKEN: ${{ secrets.CYPRESS_TEST_USER_TOKEN }}
             LIBGL_ALWAYS_SOFTWARE: 1
-            tags: @acceptance
+            CYPRESS_TAGS: "@acceptance"
           with:
             working-directory: desk-bookings-system-tests
 
