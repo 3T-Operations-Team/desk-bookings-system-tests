@@ -1,0 +1,35 @@
+name: Run Acceptance Test on docker compose
+
+on:
+  workflow_call:
+
+jobs:
+  run-acceptance:
+    runs-on: ubuntu-22.04
+    steps:
+      - name: Checkout this
+        uses: actions/checkout@v4
+        with:
+          repository: 3T-Operations-Team/desk-bookings-system-tests
+          path: desk-bookings-system-tests
+
+      - name: Start containers
+        run: SENDGRID_HOST=${{ vars.SENDGRID_HOST }} docker-compose -f "docker-compose.yml" up -d --build
+
+      - name: Run cypress tests
+        uses: cypress-io/github-action@v6
+        env:
+          CYPRESS_host: http://localhost:7070
+          CYPRESS_TEST_USER_EMAIL: ${{ secrets.CYPRESS_TEST_USER_EMAIL }}
+          CYPRESS_TEST_USER_TOKEN: ${{ secrets.CYPRESS_TEST_USER_TOKEN }}
+          LIBGL_ALWAYS_SOFTWARE: 1
+          CYPRESS_TAGS: "@acceptance"
+        with:
+          working-directory: desk-bookings-system-tests
+
+      - name: upload screenshot
+        uses: actions/upload-artifact@v3
+        if: failure()
+        with:
+          name: cypress-screenshots
+          path: desk-bookings-system-tests/cypress/screenshots
