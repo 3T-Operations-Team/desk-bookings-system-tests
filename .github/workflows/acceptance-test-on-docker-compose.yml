@@ -5,8 +5,8 @@ on:
 
 env:
   REGISTRY: ghcr.io
-  BE_IMAGE: “ghcr.io/3t-operations-team/desk-bookings-be:latest”
-  FE_IMAGE: “ghcr.io/3t-operations-team/desk-bookings-fe:latest”
+  BE_IMAGE: ghcr.io/3t-operations-team/desk-bookings-be:latest
+  FE_IMAGE: ghcr.io/3t-operations-team/desk-bookings-fe:latest
 
 jobs:
   run-acceptance:
