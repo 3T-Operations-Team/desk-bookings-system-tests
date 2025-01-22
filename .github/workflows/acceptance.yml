@@ -14,7 +14,7 @@ name: Run Acceptance Stage
 
 on:
   schedule:
-    - cron: "0 6,18 * * 1-5"
+    - cron: "0 1/2 * * 1-5"
   workflow_dispatch:
    inputs:
      e2e:
@@ -47,25 +47,25 @@ jobs:
               echo "acc_env_fe=${{ vars.EB_ENV_ACCEPTANCE_FE }}" >> "$GITHUB_OUTPUT"
               echo "acc_env_be=${{ vars.EB_ENV_ACCEPTANCE_BE }}" >> "$GITHUB_OUTPUT"
           fi
-#  run-deploy-in-environment:
-#    needs: set-environment
-#    uses: 3T-Operations-Team/desk-bookings-system/.github/workflows/release-stage.yml@main
-#    secrets: inherit
-#    with:
-#      EB_APP_FE: ${{ vars.EB_APP_FE }}
-#      EB_APP_BE: ${{ vars.EB_APP_BE }}
-#      EB_ENV_FE: ${{ needs.set-environment.outputs.acc_env_fe }}
-#      EB_ENV_BE: ${{ needs.set-environment.outputs.acc_env_be }}
-#
+  run-deploy-in-environment:
+    needs: set-environment
+    uses: 3T-Operations-Team/desk-bookings-system/.github/workflows/release-stage.yml@main
+    secrets: inherit
+    with:
+      EB_APP_FE: ${{ vars.EB_APP_FE }}
+      EB_APP_BE: ${{ vars.EB_APP_BE }}
+      EB_ENV_FE: ${{ needs.set-environment.outputs.acc_env_fe }}
+      EB_ENV_BE: ${{ needs.set-environment.outputs.acc_env_be }}
+
 ##  # todo : release external system stub
 ##  # todo : if want to reuse this workflow : have a check to release external system test instances in case of E2e env
-#  run-smoke-test:
-#    needs:
-#      - run-deploy-in-environment
-#    uses: ./.github/workflows/smoke-test-on-host.yml
-#    with:
-#      EB_ENV: ${{ needs.set-environment.outputs.acc_env_fe }}
-#    secrets: inherit
+  run-smoke-test:
+    needs:
+      - run-deploy-in-environment
+    uses: ./.github/workflows/smoke-test-on-host.yml
+    with:
+      EB_ENV: ${{ needs.set-environment.outputs.acc_env_fe }}
+    secrets: inherit
 
   run-acceptance-test:
     needs:
