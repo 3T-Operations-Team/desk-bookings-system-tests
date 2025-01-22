@@ -18,6 +18,7 @@ on:
   workflow_dispatch:
    inputs:
      e2e:
+       description: "Check to run acceptance on end to end environment"
        type: boolean
        required: true
 
