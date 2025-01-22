@@ -43,8 +43,6 @@ jobs:
           CYPRESS_TEST_USER_TOKEN: ${{ secrets.CYPRESS_TEST_USER_TOKEN }}
           LIBGL_ALWAYS_SOFTWARE: 1
           CYPRESS_TAGS: "@acceptance"
-        with:
-          working-directory: desk-bookings-system-tests
 
       - name: upload screenshot
         uses: actions/upload-artifact@v3
