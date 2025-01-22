@@ -21,6 +21,9 @@ on:
        type: boolean
        required: true
 
+permissions:
+  packages: write-all
+
 jobs:
   set-environment:
     runs-on: ubuntu-latest
