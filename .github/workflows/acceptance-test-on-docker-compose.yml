@@ -11,7 +11,6 @@ jobs:
         uses: actions/checkout@v4
         with:
           repository: 3T-Operations-Team/desk-bookings-system-tests
-          path: desk-bookings-system-tests
 
       - name: Start containers
         uses: hoverkraft-tech/compose-action@v2.0.1
