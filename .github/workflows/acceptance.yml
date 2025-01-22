@@ -45,6 +45,7 @@ jobs:
           else
               echo "acc_env_fe=${{ vars.EB_ENV_ACCEPTANCE_FE }}" >> $GITHUB_ENV
               echo "acc_env_be=${{ vars.EB_ENV_ACCEPTANCE_BE }}" >> $GITHUB_ENV
+          fi
   run-deploy-in-environment:
     needs: set-environment
     uses: 3T-Operations-Team/desk-bookings-system/.github/workflows/release-stage.yml@main
