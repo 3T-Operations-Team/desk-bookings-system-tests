@@ -62,6 +62,7 @@ jobs:
   run-smoke-test:
     needs:
       - run-deploy-in-environment
+      - set-environment
     uses: ./.github/workflows/smoke-test-on-host.yml
     with:
       EB_ENV: ${{ needs.set-environment.outputs.acc_env_fe }}
@@ -70,6 +71,7 @@ jobs:
   run-acceptance-test:
     needs:
       - run-smoke-test
+      - set-environment
     uses: ./.github/workflows/acceptance-test-on-host.yml
     with:
       EB_ENV: ${{ needs.set-environment.outputs.acc_env_fe }}
