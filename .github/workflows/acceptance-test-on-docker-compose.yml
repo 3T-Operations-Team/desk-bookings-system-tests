@@ -5,6 +5,8 @@ on:
 
 env:
   REGISTRY: ghcr.io
+  BE_IMAGE: “ghcr.io/3t-operations-team/desk-bookings-be:latest”
+  FE_IMAGE: “ghcr.io/3t-operations-team/desk-bookings-fe:latest”
 
 jobs:
   run-acceptance:
@@ -34,6 +36,8 @@ jobs:
           down-flags: "--volumes"
         env:
           SENDGRID_HOST: ${{ vars.SENDGRID_HOST }}
+          BE_IMAGE: ${{ env.BE_IMAGE }}
+          FE_IMAGE: ${{ env.FE_IMAGE }}
 
       - name: Run cypress tests
         uses: cypress-io/github-action@v6
