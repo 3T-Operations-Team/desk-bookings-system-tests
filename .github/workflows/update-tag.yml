@@ -43,7 +43,7 @@ jobs:
       - name: Output Image ID
         run: echo "The Docker Image ID is $IMAGE_ID"
 
-      - name: Tag latest and current tag to the image
+      - name: Tag image with new tag
         run: |
             docker tag $IMAGE_ID ${{ inputs.IMAGE_NAME }}:${{ github.event.inputs.new-tag }}
 

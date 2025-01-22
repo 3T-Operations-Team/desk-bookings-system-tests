@@ -79,7 +79,7 @@ jobs:
       - run-acceptance-test
     uses: ./.github/workflows/update-tag.yml
     with:
-      image-tag: "latest"
-      new-tag: "accept"
+      image-tag: latest
+      new-tag: accept
       IMAGE_NAME: ghcr.io/3t-operations-team/desk-bookings-fe
     secrets: inherit
