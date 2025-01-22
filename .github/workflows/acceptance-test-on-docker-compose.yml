@@ -14,7 +14,11 @@ jobs:
           path: desk-bookings-system-tests
 
       - name: Start containers
-        run: SENDGRID_HOST=${{ vars.SENDGRID_HOST }} docker-compose -f "docker-compose.yml" up -d --build
+        uses: hoverkraft-tech/compose-action@v2.0.1
+        with:
+          compose-file: "./docker-compose.yml"
+        env:
+          SENDGRID_HOST: ${{ vars.SENDGRID_HOST }}
 
       - name: Run cypress tests
         uses: cypress-io/github-action@v6
