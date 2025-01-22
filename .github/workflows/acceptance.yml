@@ -77,7 +77,7 @@ jobs:
   on-acceptance-success:
     needs:
       - run-acceptance-test
-    uses: ./.github/workflows/update-tag.yml@main
+    uses: ./.github/workflows/update-tag.yml
     with:
       image-tag: "latest"
       new-tag: "accept"
