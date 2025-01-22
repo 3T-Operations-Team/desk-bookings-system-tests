@@ -3,6 +3,9 @@ name: Run Acceptance Test on docker compose
 on:
   workflow_dispatch:
 
+env:
+  REGISTRY: ghcr.io
+
 jobs:
   run-acceptance:
     runs-on: ubuntu-22.04
