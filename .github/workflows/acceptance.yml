@@ -69,7 +69,7 @@ jobs:
 
   run-acceptance-test:
     needs:
-      - set-environment
+      - run-smoke-test
     uses: ./.github/workflows/acceptance-test-on-host.yml
     with:
       EB_ENV: ${{ needs.set-environment.outputs.acc_env_fe }}
