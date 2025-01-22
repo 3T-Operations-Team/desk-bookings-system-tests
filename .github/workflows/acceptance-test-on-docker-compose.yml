@@ -31,8 +31,6 @@ jobs:
           down-flags: "--volumes"
         env:
           SENDGRID_HOST: ${{ vars.SENDGRID_HOST }}
-          BE_IMAGE: ${{ env.BE_IMAGE }}
-          FE_IMAGE: ${{ env.FE_IMAGE }}
 
       - name: Run cypress tests
         uses: cypress-io/github-action@v6
