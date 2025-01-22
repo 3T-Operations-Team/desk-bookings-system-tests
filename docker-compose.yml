@@ -16,7 +16,7 @@ services:
       - mongodb
 
   backend:
-    image: desk-bookings-be:latest
+    image: ${BE_IMAGE}
     container_name: backend
     ports:
       - "8080:8080"
@@ -31,7 +31,7 @@ services:
       - mongodb
 
   frontend:
-    image: desk-bookings-fe:latest
+    image: ${FE_IMAGE}
     container_name: frontend
     ports:
       - "7070:8080"

@@ -5,15 +5,13 @@ on:
 
 env:
   REGISTRY: ghcr.io
+  BE_IMAGE: ghcr.io/3t-operations-team/desk-bookings-be:latest
+  FE_IMAGE: ghcr.io/3t-operations-team/desk-bookings-fe:latest
 
 jobs:
   run-acceptance:
     name: Run docker compose and acceptance tests
     runs-on: ubuntu-latest
-
-    permissions:
-      contents: read
-      packages: read
 
     steps:
       - name: Checkout repository
@@ -30,10 +28,11 @@ jobs:
         uses: hoverkraft-tech/compose-action@v2.1.0
         with:
           compose-file: "./docker-compose.yml"
-          up-flags: "--no-build"
           down-flags: "--volumes"
         env:
           SENDGRID_HOST: ${{ vars.SENDGRID_HOST }}
+          BE_IMAGE: ${{ env.BE_IMAGE }}
+          FE_IMAGE: ${{ env.FE_IMAGE }}
 
       - name: Run cypress tests
         uses: cypress-io/github-action@v6
