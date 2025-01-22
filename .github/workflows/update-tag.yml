@@ -1,0 +1,62 @@
+# this workflow gets the latest tagged image and
+# then push the new tag. And also point it to latest if it is not.
+name: Update tag
+on:
+  workflow_call:
+    inputs:
+      image-tag:
+        required: true
+        type: string
+      new-tag:
+        required: true
+        type: string
+      IMAGE_NAME:
+        required: true
+        type: string
+
+env:
+  REGISTRY: ghcr.io
+
+jobs:
+  update:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          repository: 3T-Operations-Team/desk-bookings-fe
+      - name: Registry login
+        uses: docker/login-action@v3.3.0
+        with:
+          registry: ${{ env.REGISTRY }}
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+      - name: Pull Docker Image
+        run: |
+            docker pull ${{ inputs.IMAGE_NAME }}:${{ inputs.image-tag }}
+
+      - name: Get image id
+        id: image_id
+        run: |
+            IMAGE_ID=$(docker inspect --format='{{.Id}}' ${{ inputs.IMAGE_NAME }}:${{ inputs.image-tag }})
+            echo "IMAGE_ID=${IMAGE_ID}" >> $GITHUB_ENV
+      - name: Output Image ID
+        run: echo "The Docker Image ID is $IMAGE_ID"
+
+      - name: Tag latest and current tag to the image
+        run: |
+            docker tag $IMAGE_ID ${{ inputs.IMAGE_NAME }}:${{ github.event.inputs.new-tag }}
+
+      - name: Conditionally Update Latest Tag
+        if: ${{ github.event.inputs.source-tag != 'latest' }}
+        run: |
+          docker tag $IMAGE_ID ${{ inputs.IMAGE_NAME }}:latest
+
+      - name: Push New Tag
+        run: |
+            docker push ${{ inputs.IMAGE_NAME }}:${{ github.event.inputs.new-tag }}
+
+      - name: Push Latest Tag
+        if: ${{ github.event.inputs.source-tag != 'latest' }}
+        run: |
+            docker push ${{ inputs.IMAGE_NAME }}:latest
