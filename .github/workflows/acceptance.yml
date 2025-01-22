@@ -9,8 +9,7 @@
 #    Run Smoke Tests
 #    Run Acceptance Tests
 # 3. Tag the
-
-# todo : move to test repo
+# todo : when e2e acceptance available, change line 44
 name: Run Acceptance Stage
 
 on:
@@ -41,8 +40,8 @@ jobs:
           fi
           
           if [ "$e2e" == "true" ]; then
-              echo "acc_env_fe=${{ placeholder }}" >> $GITHUB_ENV
-              echo "acc_env_be=${{ placeholder }}" >> $GITHUB_ENV
+              echo "acc_env_fe=${{ vars.EB_ENV_ACCEPTANCE_FE }}" >> $GITHUB_ENV
+              echo "acc_env_be=${{ vars.EB_ENV_ACCEPTANCE_BE }}" >> $GITHUB_ENV
           else
               echo "acc_env_fe=${{ vars.EB_ENV_ACCEPTANCE_FE }}" >> $GITHUB_ENV
               echo "acc_env_be=${{ vars.EB_ENV_ACCEPTANCE_BE }}" >> $GITHUB_ENV
