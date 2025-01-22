@@ -1,0 +1,84 @@
+# this stage is run before uat-stage and production stage
+# in an acceptance environment.
+#
+# 1. pass input env var
+#
+# 2. trigger Release System on this environment
+#    Release External System Stubs (this is a placeholder step, no actions at the moment)
+#    Checkout System Test Repository
+#    Run Smoke Tests
+#    Run Acceptance Tests
+# 3. Tag the
+
+# todo : move to test repo
+name: Run Acceptance Stage
+
+on:
+  schedule:
+    - cron: "0 6,18 * * 1-5"
+  workflow_dispatch:
+   inputs:
+     e2e:
+       type: boolean
+       required: true
+
+jobs:
+  set-environment:
+    runs-on: ubuntu-latest
+    outputs:
+      acc_env_fe: ${{ steps.set-env.outputs.acc_env_fe }}
+      acc_env_be: ${{ steps.set-env.outputs.acc_env_be }}
+    steps:
+      - name: Set environment variables
+        id: set-env
+        run: |
+          if [ "${{ github.event_name }}" == "schedule" ]; then
+              echo "Scheduled event detected. Defaulting e2e to false."
+              e2e=false
+          else
+              echo "Using e2e input value."
+              e2e=${{ inputs.e2e }}
+          fi
+          
+          if [ "$e2e" == "true" ]; then
+              echo "acc_env_fe=${{ placeholder }}" >> $GITHUB_ENV
+              echo "acc_env_be=${{ placeholder }}" >> $GITHUB_ENV
+          else
+              echo "acc_env_fe=${{ vars.EB_ENV_ACCEPTANCE_FE }}" >> $GITHUB_ENV
+              echo "acc_env_be=${{ vars.EB_ENV_ACCEPTANCE_BE }}" >> $GITHUB_ENV
+  run-deploy-in-environment:
+    needs: set-environment
+    uses: 3T-Operations-Team/desk-bookings-system/.github/workflows/release-stage.yml
+    secrets: inherit
+    with:
+      EB_APP_FE: ${{ vars.EB_APP_FE }}
+      EB_APP_BE: ${{ vars.EB_APP_BE }}
+      EB_ENV_FE: ${{ needs.set-environment.outputs.acc_env_fe }}
+      EB_ENV_BE: ${{ needs.set-environment.outputs.acc_env_be }}
+
+  # todo : release external system stub
+  # todo : if want to reuse this workflow : have a check to release external system test instances in case of E2e env
+  run-smoke-test:
+    needs:
+      - run-deploy-in-environment
+    uses: ./.github/workflows/smoke-test-on-host.yml@main
+    with:
+      EB_ENV: ${{ needs.set-environment.outputs.acc_env_fe }}
+    secrets: inherit
+
+  run-acceptance-test:
+    needs:
+      - run-smoke-test
+    uses: ./.github/workflows/acceptance-test-on-host.yml@main
+    with:
+      EB_ENV: ${{ needs.set-environment.outputs.acc_env_fe }}
+    secrets: inherit
+
+#  on-acceptance-success:
+#    needs:
+#      - run-acceptance-test
+#    uses: 3T-Operations-Team/desk-bookings-fe/.github/workflows/update-tag.yml@main
+#    with:
+#      image-tag: "latest"
+#      new-tag: "accept"
+#    secrets: inherit
