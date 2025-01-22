@@ -50,16 +50,6 @@ jobs:
         run: |
             docker tag $IMAGE_ID ${{ inputs.IMAGE_NAME }}:${{ inputs.new-tag }}
 
-      - name: Conditionally Update Latest Tag
-        if: ${{ inputs.source-tag != 'latest' }}
-        run: |
-          docker tag $IMAGE_ID ${{ inputs.IMAGE_NAME }}:latest
-
       - name: Push New Tag
         run: |
             docker push ${{ inputs.IMAGE_NAME }}:${{ inputs.new-tag }}
-
-      - name: Push Latest Tag
-        if: ${{ inputs.source-tag != 'latest' }}
-        run: |
-            docker push ${{ inputs.IMAGE_NAME }}:latest
