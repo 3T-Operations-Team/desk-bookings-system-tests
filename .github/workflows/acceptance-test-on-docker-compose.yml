@@ -9,7 +9,6 @@ env:
 jobs:
   run-acceptance:
     name: Run docker compose and acceptance tests
-    needs: publish
     runs-on: ubuntu-latest
 
     permissions:
