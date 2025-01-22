@@ -23,6 +23,10 @@ jobs:
           registry: ${{ env.REGISTRY }}
           username: ${{ github.actor }}
           password: ${{ secrets.GITHUB_TOKEN }}
+      # check if this pull is denied
+      - name: Pull Docker Image
+        run: |
+          docker pull ${{ env.BE_IMAGE }}
 
       - name: Start containers
         uses: hoverkraft-tech/compose-action@v2.1.0
