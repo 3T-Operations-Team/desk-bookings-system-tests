@@ -31,6 +31,12 @@ jobs:
           registry: ${{ env.REGISTRY }}
           username: ${{ github.actor }}
           password: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Debug inputs
+        run: |
+          echo "IMAGE_NAME: ${{ inputs.IMAGE_NAME }}"
+          echo "new-tag: ${{ inputs.new-tag }}"
+
       - name: Pull Docker Image
         run: |
             docker pull ${{ inputs.IMAGE_NAME }}:${{ inputs.image-tag }}
@@ -45,7 +51,7 @@ jobs:
 
       - name: Tag image with new tag
         run: |
-            docker tag $IMAGE_ID ${{ inputs.IMAGE_NAME }}:${{ github.event.inputs.new-tag }}
+            docker tag $IMAGE_ID ${{ inputs.IMAGE_NAME }}:${{ inputs.new-tag }}
 
       - name: Conditionally Update Latest Tag
         if: ${{ github.event.inputs.source-tag != 'latest' }}
@@ -54,7 +60,7 @@ jobs:
 
       - name: Push New Tag
         run: |
-            docker push ${{ inputs.IMAGE_NAME }}:${{ github.event.inputs.new-tag }}
+            docker push ${{ inputs.IMAGE_NAME }}:${{ inputs.new-tag }}
 
       - name: Push Latest Tag
         if: ${{ github.event.inputs.source-tag != 'latest' }}
