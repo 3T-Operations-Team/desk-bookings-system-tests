@@ -74,12 +74,22 @@ jobs:
       EB_ENV: ${{ needs.set-environment.outputs.acc_env_fe }}
     secrets: inherit
 
-  on-acceptance-success:
+  on-acceptance-success-tag-fe:
     needs:
       - run-acceptance-test
     uses: ./.github/workflows/update-tag.yml
     with:
       image-tag: latest
-      new-tag: accept
+      new-tag: draft
       IMAGE_NAME: ghcr.io/3t-operations-team/desk-bookings-fe
+    secrets: inherit
+
+  on-acceptance-success-tag-be:
+    needs:
+      - run-acceptance-test
+    uses: ./.github/workflows/update-tag.yml
+    with:
+      image-tag: latest
+      new-tag: draft
+      IMAGE_NAME: ghcr.io/3t-operations-team/desk-bookings-be
     secrets: inherit
