@@ -14,6 +14,18 @@ on:
         required: true
         type: string
 
+  workflow_dispatch:
+    inputs:
+      image-tag:
+        required: true
+        type: string
+      new-tag:
+        required: true
+        type: string
+      IMAGE_NAME:
+        required: true
+        type: string
+
 env:
   REGISTRY: ghcr.io
 
@@ -33,23 +45,42 @@ jobs:
         run: |
           echo "IMAGE_NAME: ${{ inputs.IMAGE_NAME }}"
           echo "new-tag: ${{ inputs.new-tag }}"
-
-      - name: Pull Docker Image
+        
+      - name: Fetch existing tags
+        id: fetch-tags
         run: |
-            docker pull ${{ inputs.IMAGE_NAME }}:${{ inputs.image-tag }}
+            IMAGE_NAME = ${{ inputs.IMAGE_NAME }}
+            DATE=$date
+            PREFIX="${DATE}-acc"
+            
+            # Fetch existing tags from GHCR
+            EXISTING_TAGS=$(gh api --header "Accept: application/vnd.github+json" \
+              /user/packages/container/${IMAGE_NAME}/versions | jq -r '.[].metadata.container.tags[]' | grep "^${PREFIX}-")
+            
+            echo "TAGS : $EXISTING_TAGS";
+            if [[ -z "$EXISTING_TAGS" ]]; then
+              echo "latest_number=0" >> $GITHUB_ENV
+            else
+              LAST_NUMBER=$(echo "$EXISTING_TAGS" | awk -F '-' '{print $NF}' | sort -nr | head -n 1)
+              echo "latest_number=$LAST_NUMBER" >> $GITHUB_ENV
+            fi
 
-      - name: Get image id
-        id: image_id
-        run: |
-            IMAGE_ID=$(docker inspect --format='{{.Id}}' ${{ inputs.IMAGE_NAME }}:${{ inputs.image-tag }})
-            echo "IMAGE_ID=${IMAGE_ID}" >> $GITHUB_ENV
-      - name: Output Image ID
-        run: echo "The Docker Image ID is $IMAGE_ID"
-
-      - name: Tag image with new tag
-        run: |
-            docker tag $IMAGE_ID ${{ inputs.IMAGE_NAME }}:${{ inputs.new-tag }}
-
-      - name: Push New Tag
-        run: |
-            docker push ${{ inputs.IMAGE_NAME }}:${{ inputs.new-tag }}
+#      - name: Pull Docker Image
+#        run: |
+#            docker pull ${{ inputs.IMAGE_NAME }}:${{ inputs.image-tag }}
+#
+#      - name: Get image id
+#        id: image_id
+#        run: |
+#            IMAGE_ID=$(docker inspect --format='{{.Id}}' ${{ inputs.IMAGE_NAME }}:${{ inputs.image-tag }})
+#            echo "IMAGE_ID=${IMAGE_ID}" >> $GITHUB_ENV
+#      - name: Output Image ID
+#        run: echo "The Docker Image ID is $IMAGE_ID"
+#
+#      - name: Tag image with new tag
+#        run: |
+#            docker tag $IMAGE_ID ${{ inputs.IMAGE_NAME }}:${{ inputs.new-tag }}
+#
+#      - name: Push New Tag
+#        run: |
+#            docker push ${{ inputs.IMAGE_NAME }}:${{ inputs.new-tag }}
