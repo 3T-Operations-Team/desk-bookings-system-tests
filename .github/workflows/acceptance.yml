@@ -42,8 +42,8 @@ jobs:
           fi
           
           if [ "$e2e" == "true" ]; then
-              echo "acc_env_fe=${{ vars.EB_ENV_ACCEPTANCE_FE }}" >> "$GITHUB_OUTPUT"
-              echo "acc_env_be=${{ vars.EB_ENV_ACCEPTANCE_BE }}" >> "$GITHUB_OUTPUT"
+              echo "acc_env_fe=${{ vars.EB_ENV_E2E_FE }}" >> "$GITHUB_OUTPUT"
+              echo "acc_env_be=${{ vars.EB_ENV_E2E_BE }}" >> "$GITHUB_OUTPUT"
           else
               echo "acc_env_fe=${{ vars.EB_ENV_ACCEPTANCE_FE }}" >> "$GITHUB_OUTPUT"
               echo "acc_env_be=${{ vars.EB_ENV_ACCEPTANCE_BE }}" >> "$GITHUB_OUTPUT"
