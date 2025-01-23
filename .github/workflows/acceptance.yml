@@ -28,6 +28,7 @@ jobs:
     outputs:
       acc_env_fe: ${{ steps.set-env.outputs.acc_env_fe }}
       acc_env_be: ${{ steps.set-env.outputs.acc_env_be }}
+      tag: ${{steps.generate-tag.outputs.tag}}
     steps:
       - name: Set environment variables
         id: set-env
@@ -47,6 +48,13 @@ jobs:
               echo "acc_env_fe=${{ vars.EB_ENV_ACCEPTANCE_FE }}" >> "$GITHUB_OUTPUT"
               echo "acc_env_be=${{ vars.EB_ENV_ACCEPTANCE_BE }}" >> "$GITHUB_OUTPUT"
           fi
+      - name: Generate acceptance Tag
+        id: generate-tag
+        run: |
+          DATE=$(date +'%d%m%y')
+          TIME=$(date +'%H%M')
+          TAG="${DATE}-${TIME}-acc"
+          echo "tag=$TAG" >> "$GITHUB_OUTPUT"
 #  run-deploy-in-environment:
 #    needs: set-environment
 #    uses: 3T-Operations-Team/desk-bookings-system/.github/workflows/release-stage.yml@main
@@ -83,7 +91,7 @@ jobs:
     uses: ./.github/workflows/update-tag.yml
     with:
       image-tag: latest
-      new-tag: draft
+      new-tag: ${{needs.set-environment.outputs.tag}}
       IMAGE_NAME: ghcr.io/3t-operations-team/desk-bookings-fe
     secrets: inherit
 
