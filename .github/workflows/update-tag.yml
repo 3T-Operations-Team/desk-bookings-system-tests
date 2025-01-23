@@ -36,6 +36,8 @@ jobs:
         
       - name: Fetch existing tags
         id: fetch-tags
+        env:
+          GITHUB_TOKEN: ${{secrets.GITHUB_TOKEN}}
         run: |
             DATE=$date
             PREFIX="${DATE}-acc"
