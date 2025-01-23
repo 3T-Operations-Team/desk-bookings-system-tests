@@ -35,7 +35,7 @@ jobs:
         id: image_id
         run: |
             IMAGE_ID=$(docker inspect --format='{{.Id}}' ${{ inputs.IMAGE_NAME }}:${{ inputs.image-tag }})
-            echo "IMAGE_ID=${IMAGE_ID}" >> "$GITHUB_OUTPUT"
+            echo "IMAGE_ID=${IMAGE_ID}" >> $GITHUB_OUTPUT
       - name: Output Image ID
         run: echo "The Docker Image ID is $IMAGE_ID"
       - name : check tags
