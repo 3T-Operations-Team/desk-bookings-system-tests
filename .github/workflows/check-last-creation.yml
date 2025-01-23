@@ -9,6 +9,8 @@ on:
       IMAGE_NAME:
         required: true
         type: string
+      file_name:
+        type: string
 
 env:
   REGISTRY: ghcr.io
@@ -50,13 +52,13 @@ jobs:
           
           # Check if the image was created within the last 2 hours (7200 seconds)
           if [ $TIME_DIFF -lt 7200 ]; then
-            echo "run_further=true" >> run_further.txt
+            echo "run_further=true" >> ${{ inputs.file_name }}
           else
-            echo "run_further=false" >> run_further.txt
+            echo "run_further=false" >> ${{ inputs.file_name }}
             echo "Image was created more than 2 hours ago. No further actions."
           fi
       - name: Upload File
         uses: actions/upload-artifact@v4
         with:
-            name: run_further
-            path: run_further.txt
+            name: ${{ inputs.file_name }}
+            path: ${{ inputs.file_name }}

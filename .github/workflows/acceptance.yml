@@ -62,14 +62,18 @@ jobs:
     with:
       image-tag: latest
       IMAGE_NAME: ghcr.io/3t-operations-team/desk-bookings-be
+      file_name: run_be.txt
     secrets: inherit
 
   check-image-fe:
-    needs: set-environment
+    needs:
+        - set-environment
+        - check-image-be
     uses: ./.github/workflows/check-last-creation.yml
     with:
       image-tag: latest
       IMAGE_NAME: ghcr.io/3t-operations-team/desk-bookings-fe
+      file_name: run_fe.txt
     secrets: inherit
 
   condition-check:
@@ -80,16 +84,30 @@ jobs:
     outputs:
       proceed: ${{ steps.determine.outputs.proceed }}
     steps:
-      - name: Download Combined File
+      - name: Download run be File
         uses: actions/download-artifact@v4
         with:
-          name: run_further
-      - name: Determine If Deployment Should Proceed
+          name: run_be.txt
+      - name: Determine If Deployment Should Proceed for fe
         id: determine
         run: |
-          if grep -q "false" run_further.txt; then
+          if grep -q "false" run_be.txt; then
             echo "proceed=false" >> $GITHUB_OUTPUT
+            exit 0
           else
+            echo "proceed=true" >> $GITHUB_OUTPUT
+          fi
+      - name: Download run fe File
+        uses: actions/download-artifact@v4
+        with:
+          name: run_fe.txt
+      - name: Determine If Deployment Should Proceed for fe
+        id: determine
+        run: |
+          if grep -q "false" run_fe.txt; then
+            echo "proceed=false" >> $GITHUB_OUTPUT
+            exit 0
+          elif [[ -z "${{ steps.determine.outputs.proceed }}"]]; then
             echo "proceed=true" >> $GITHUB_OUTPUT
           fi
   run-deploy-in-environment:
