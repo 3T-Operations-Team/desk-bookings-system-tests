@@ -73,6 +73,7 @@ jobs:
     uses: ./.github/workflows/smoke-test-on-host.yml
     with:
       EB_ENV: ${{ needs.set-environment.outputs.acc_env_fe }}
+      BE_URL: ${{ needs.set-environment.outputs.acc_env_be }}
     secrets: inherit
 
   run-acceptance-test:
