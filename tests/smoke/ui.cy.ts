@@ -27,7 +27,7 @@ describe("Login page", () => {
 });
 
 describe("Main page", () => {
-  before(() => {
+  beforeEach(() => {
     window.localStorage.setItem(
       "logedUserEmail",
       Cypress.env("TEST_USER_EMAIL"),
@@ -36,30 +36,26 @@ describe("Main page", () => {
       "logedUserToken",
       Cypress.env("TEST_USER_TOKEN"),
     );
-  });
-
-  beforeEach(() => {
     cy.visit(Cypress.env("host"));
   });
 
   it("should be able to see main page", () => {
     cy.location("pathname").should("eq", "/");
 
-    // should be able to see page title
-    // should be able to see navbar
-    // should be able to see username
-    // should be able to see calendar
-    // should be able to see desks
-    // should be able to see booking button
+    cy.get("button").contains(Cypress.env("TEST_USER_EMAIL")).should("exist");
+    cy.get(".MuiDateCalendar-root").should("exist");
+    cy.get(".desk").should("exist");
+    cy.get("button").contains("Book").should("exist");
   });
 
   it("should be able to book a desk", () => {
-    // book desk
-    // see booking confiration
+    cy.get(".desk").contains("Flex 27").click();
+    cy.get(".contents").contains("Book").click();
+    cy.contains("Desk successfully booked").should("exist");
   });
 
   it("should be able to cancel a booking", () => {
-    // book desk
-    // see booking confiration
+    cy.get(".contents").contains("Cancel Booking").click();
+    cy.contains("Booking canceled").should("exist");
   });
 });
