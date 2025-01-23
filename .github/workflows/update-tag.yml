@@ -40,7 +40,7 @@ jobs:
         run: echo "The Docker Image ID is $IMAGE_ID"
       - name : check tags
         run: |
-            docker inspect --format='{{json .RepoTags}}' <image-id> | grep -o '"acc-[^"]*"' || echo "No tags starting with acc- found"
+            docker inspect --format='{{json .RepoTags}}' ${{env.IMAGE_ID}} | grep -o '"acc-[^"]*"' || echo "No tags starting with acc- found"
 
 #      - name: Tag image with new tag
 #        run: |
