@@ -49,4 +49,4 @@ jobs:
         if: failure()
         with:
           name: cypress-screenshots
-          path: desk-bookings-system-tests/cypress/screenshots
+          path: cypress/screenshots
