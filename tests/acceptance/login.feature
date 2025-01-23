@@ -22,7 +22,7 @@ Feature: Employee login
     When the employee logs out
     Then the employee is redirected to the login page
 
-  Rule: Incorrect credentials always show the same error message
+  Rule: Incorrect credentials do not allow the user to login
 
     Scenario: Employee logs in with incorrect email
       Given the employee is on the login page
