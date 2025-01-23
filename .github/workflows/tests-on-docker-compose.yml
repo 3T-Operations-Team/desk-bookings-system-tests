@@ -5,12 +5,16 @@ on:
 
 env:
   REGISTRY: ghcr.io
+  BE_IMAGE: ghcr.io/3t-operations-team/desk-bookings-be:latest
+  FE_IMAGE: ghcr.io/3t-operations-team/desk-bookings-fe:latest
 
 jobs:
   run-acceptance:
-    runs-on: ubuntu-22.04
+    name: Run docker compose and acceptance tests
+    runs-on: ubuntu-latest
+
     steps:
-      - name: Checkout this
+      - name: Checkout repository
         uses: actions/checkout@v4
         with:
           repository: 3T-Operations-Team/desk-bookings-system-tests
@@ -23,9 +27,10 @@ jobs:
           password: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Start containers
-        uses: hoverkraft-tech/compose-action@v2.0.1
+        uses: hoverkraft-tech/compose-action@v2.1.0
         with:
           compose-file: "./docker-compose.yml"
+          down-flags: "--volumes"
         env:
           SENDGRID_HOST: ${{ vars.SENDGRID_HOST }}
 
