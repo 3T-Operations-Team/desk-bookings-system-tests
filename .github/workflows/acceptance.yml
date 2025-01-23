@@ -10,7 +10,7 @@
 #    Run Acceptance Tests
 # 3. Tag the
 # todo : when e2e acceptance available, change line 44
-name: Run Acceptance Stage
+name: Acceptance Stage
 
 on:
   schedule:
