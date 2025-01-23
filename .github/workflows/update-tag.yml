@@ -40,7 +40,7 @@ jobs:
         run: echo "The Docker Image ID is $IMAGE_ID"
       - name : check tags
         run: |
-            docker inspect ${{env.IMAGE_ID}}
+            docker inspect $IMAGE_ID
 
 #      - name: Tag image with new tag
 #        run: |
