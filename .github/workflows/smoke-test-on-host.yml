@@ -16,7 +16,6 @@ jobs:
         uses: actions/checkout@v4
         with:
           repository: 3T-Operations-Team/desk-bookings-system-tests
-          path: desk-bookings-system-tests
 
       - name: Cypress run in env
         uses: cypress-io/github-action@v6
@@ -24,10 +23,10 @@ jobs:
           CYPRESS_host: http://${{ inputs.EB_ENV }}.${{ secrets.AWS_REGION }}.elasticbeanstalk.com
           CYPRESS_be_host: http://${{ inputs.BE_URL }}.${{ secrets.AWS_REGION }}.elasticbeanstalk.com
           CYPRESS_TEST_USER_EMAIL: ${{ secrets.CYPRESS_TEST_USER_EMAIL }}
+          CYPRESS_TEST_USER_PASSWORD: ${{ secrets.CYPRESS_TEST_USER_PASSWORD }}
           CYPRESS_TEST_USER_TOKEN: ${{ secrets.CYPRESS_TEST_USER_TOKEN }}
           LIBGL_ALWAYS_SOFTWARE: 1
         with:
-          working-directory: desk-bookings-system-tests
           spec: tests/smoke/*
 
       - name: upload screenshot
@@ -35,7 +34,7 @@ jobs:
         if: failure()
         with:
           name: cypress-screenshots
-          path: desk-bookings-system-tests/cypress/screenshots
+          path: cypress/screenshots
 
       - name: Zip results
         if: failure()

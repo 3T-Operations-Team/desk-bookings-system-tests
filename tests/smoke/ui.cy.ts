@@ -1,14 +1,28 @@
 describe("Login page", () => {
-  it("user should be able to see the log in page", () => {
+  beforeEach(() => {
     cy.visit(Cypress.env("host"));
+  });
 
-    // should be able to see page title
-    // should be able to see username field
-    // should be able to see password field
-    // should be able to see login button
+  it("should be able to see the log in page", () => {
+    cy.location("pathname").should("eq", "/login");
 
-    // should be able to login
-    // should be redirected to the main page
+    cy.contains("Desk Booking").should("exist");
+
+    const emailField = cy.get('input[placeholder="Email"]');
+    emailField.should("exist");
+
+    const passwordField = cy.get('input[placeholder="Password"]');
+    passwordField.should("exist");
+
+    const loginButton = cy.get("button").contains("Login");
+    loginButton.should("exist");
+
+    emailField.type(Cypress.env("TEST_USER_EMAIL"));
+    passwordField.type(Cypress.env("TEST_USER_PASSWORD"));
+
+    loginButton.click();
+
+    cy.location("pathname").should("eq", "/");
   });
 });
 
@@ -24,7 +38,13 @@ describe("Main page", () => {
     );
   });
 
-  it("user should be able to see main page", () => {
+  beforeEach(() => {
+    cy.visit(Cypress.env("host"));
+  });
+
+  it("should be able to see main page", () => {
+    cy.location("pathname").should("eq", "/");
+
     // should be able to see page title
     // should be able to see navbar
     // should be able to see username
