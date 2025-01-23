@@ -29,11 +29,6 @@ jobs:
           username: ${{ github.actor }}
           password: ${{ secrets.GITHUB_TOKEN }}
 
-      - name: Debug inputs
-        run: |
-          echo "IMAGE_NAME: ${{ inputs.IMAGE_NAME }}"
-          echo "new-tag: ${{ inputs.new-tag }}"
-        
       - name: Fetch existing tags
         id: fetch-tags
         env:
@@ -43,10 +38,10 @@ jobs:
             PREFIX="${DATE}-acc"
             
             # Fetch existing tags from GHCR
-          # Direct API call using curl (requires GitHub token authentication)
-            EXISTING_TAGS=$(curl -s -H "Authorization: Bearer ${{ secrets.GITHUB_TOKEN }}" \
-            "https://api.github.com/repos/3t-operations-team}/desk-bookings-fe_packages/container/${{inputs.IMAGE_NAME}}/versions" | jq -r '.[].metadata.container.tags[]' | grep "^${PREFIX}-")
-            
+            # Direct API call using curl (requires GitHub token authentication)
+              EXISTING_TAGS=$(curl -s -H "Authorization: Bearer ${{ secrets.GITHUB_TOKEN }}" \
+              "https://api.github.com/repos/3t-operations-team}/desk-bookings-fe_packages/container/${{inputs.IMAGE_NAME}}/versions" | jq -r '.[].metadata.container.tags[]' | grep "^${PREFIX}-")
+              
             echo "TAGS : $EXISTING_TAGS";
             if [[ -z "$EXISTING_TAGS" ]]; then
               echo "latest_number=0" >> $GITHUB_ENV
