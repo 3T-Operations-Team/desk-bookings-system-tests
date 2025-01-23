@@ -38,11 +38,14 @@ jobs:
             echo "IMAGE_ID=${IMAGE_ID}" >> $GITHUB_ENV
       - name: Output Image ID
         run: echo "The Docker Image ID is $IMAGE_ID"
-
-      - name: Tag image with new tag
+      - name : check tags
         run: |
-            docker tag $IMAGE_ID ${{ inputs.IMAGE_NAME }}:${{ inputs.new-tag }}
+            docker inspect --format='{{json .RepoTags}}' <image-id> | grep -o '"acc-[^"]*"' || echo "No tags starting with acc- found"
 
-      - name: Push New Tag
-        run: |
-            docker push ${{ inputs.IMAGE_NAME }}:${{ inputs.new-tag }}
+#      - name: Tag image with new tag
+#        run: |
+#            docker tag $IMAGE_ID ${{ inputs.IMAGE_NAME }}:${{ inputs.new-tag }}
+#
+#      - name: Push New Tag
+#        run: |
+#            docker push ${{ inputs.IMAGE_NAME }}:${{ inputs.new-tag }}
