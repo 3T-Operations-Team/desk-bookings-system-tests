@@ -36,16 +36,10 @@ jobs:
         run: |
             IMAGE_ID=$(docker inspect --format='{{.Id}}' ${{ inputs.IMAGE_NAME }}:${{ inputs.image-tag }})
             echo "IMAGE_ID=${IMAGE_ID}" >> $GITHUB_ENV
-      - name: Output Image ID
-        run: echo "The Docker Image ID is $IMAGE_ID"
-      - name : check tags
+      - name: Tag image with new tag
         run: |
-            docker inspect $IMAGE_ID
+            docker tag $IMAGE_ID ${{ inputs.IMAGE_NAME }}:${{ inputs.new-tag }}
 
-#      - name: Tag image with new tag
-#        run: |
-#            docker tag $IMAGE_ID ${{ inputs.IMAGE_NAME }}:${{ inputs.new-tag }}
-#
-#      - name: Push New Tag
-#        run: |
-#            docker push ${{ inputs.IMAGE_NAME }}:${{ inputs.new-tag }}
+      - name: Push New Tag
+        run: |
+            docker push ${{ inputs.IMAGE_NAME }}:${{ inputs.new-tag }}

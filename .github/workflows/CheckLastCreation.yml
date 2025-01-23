@@ -1,0 +1,57 @@
+# this workflow gets image with "image tag" input and tag it with new-tag.
+name: Check if docker image is recent
+on:
+  workflow_call:
+    inputs:
+      image-tag:
+        required: true
+        type: string
+      IMAGE_NAME:
+        required: true
+        type: string
+
+env:
+  REGISTRY: ghcr.io
+
+jobs:
+  update:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Registry login
+        uses: docker/login-action@v3.3.0
+        with:
+          registry: ${{ env.REGISTRY }}
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+      - name: Pull Docker Image
+        run: |
+          docker pull ${{ inputs.IMAGE_NAME }}:${{ inputs.image-tag }}
+
+      - name: Get image id
+        id: image_id
+        run: |
+          IMAGE_ID=$(docker inspect --format='{{.Id}}' ${{ inputs.IMAGE_NAME }}:${{ inputs.image-tag }})
+          echo "IMAGE_ID=${IMAGE_ID}" >> $GITHUB_ENV
+      - name: Output Image ID
+        run: echo "The Docker Image ID is $IMAGE_ID"
+
+      - name: Get image creation time
+        run: |
+          IMAGE_ID=$IMAGE_ID
+          IMAGE_CREATION_TIME=$(docker inspect --format '{{.Created}}' $IMAGE_ID)
+          IMAGE_CREATION_TIMESTAMP=$(date --date="$IMAGE_CREATION_TIME" +%s)
+          
+          # Get the current time in seconds since epoch
+          CURRENT_TIMESTAMP=$(date +%s)
+          
+          # Calculate the difference between the current time and the image creation time
+          TIME_DIFF=$((CURRENT_TIMESTAMP - IMAGE_CREATION_TIMESTAMP))
+          
+          # Check if the image was created within the last 2 hours (7200 seconds)
+          if [ $TIME_DIFF -lt 7200 ]; then
+            echo "Image was created less than 2 hours ago. Skipping action."
+            exit 0  # Skip further actions by exiting
+          else
+            echo "Image was created more than 2 hours ago. Proceeding with actions."
+          fi

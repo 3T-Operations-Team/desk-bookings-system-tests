@@ -56,7 +56,16 @@ jobs:
           TAG="acc-${DATE}-${TIME}"
           echo "tag=$TAG" >> "$GITHUB_OUTPUT"
 
-#  run-deploy-in-environment:
+  check-image-is-recent:
+    needs: set-environment
+    uses: ./.github/workflows/CheckLastCreation.yml
+    with:
+      image-tag: latest
+      IMAGE_NAME: ghcr.io/3t-operations-team/desk-bookings-be
+    secrets: inherit
+
+
+  #  run-deploy-in-environment:
 #    needs: set-environment
 #    uses: 3T-Operations-Team/desk-bookings-system/.github/workflows/release-stage.yml@main
 #    secrets: inherit
@@ -96,13 +105,13 @@ jobs:
 #      IMAGE_NAME: ghcr.io/3t-operations-team/desk-bookings-fe
 #    secrets: inherit
 
-  on-acceptance-success-tag-be:
-    needs:
-#      - run-acceptance-test
-      - set-environment
-    uses: ./.github/workflows/update-tag.yml
-    with:
-      image-tag: latest
-      new-tag: ${{needs.set-environment.outputs.tag}}
-      IMAGE_NAME: ghcr.io/3t-operations-team/desk-bookings-be
-    secrets: inherit
+#  on-acceptance-success-tag-be:
+#    needs:
+##      - run-acceptance-test
+#      - set-environment
+#    uses: ./.github/workflows/update-tag.yml
+#    with:
+#      image-tag: latest
+#      new-tag: ${{needs.set-environment.outputs.tag}}
+#      IMAGE_NAME: ghcr.io/3t-operations-team/desk-bookings-be
+#    secrets: inherit
