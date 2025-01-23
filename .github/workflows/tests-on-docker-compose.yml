@@ -39,9 +39,9 @@ jobs:
         env:
           CYPRESS_host: http://localhost:7070
           CYPRESS_be_host: http://localhost:8080
-          CYPRESS_TEST_USER_EMAIL: ${{ secrets.CYPRESS_TEST_USER_EMAIL }}
-          CYPRESS_TEST_USER_TOKEN: ${{ secrets.CYPRESS_TEST_USER_TOKEN }}
-          CYPRESS_TEST_USER_PASSWORD: ${{ secrets.CYPRESS_TEST_USER_PASSWORD }}
+          CYPRESS_TEST_USER_EMAIL: test@example.com
+          CYPRESS_TEST_USER_TOKEN: Basic dGVzdEBleGFtcGxlLmNvbToxMjM=
+          CYPRESS_TEST_USER_PASSWORD: 123
           LIBGL_ALWAYS_SOFTWARE: 1
 
       - name: upload screenshot
