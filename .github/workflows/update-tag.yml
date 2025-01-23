@@ -14,18 +14,6 @@ on:
         required: true
         type: string
 
-  workflow_dispatch:
-    inputs:
-      image-tag:
-        required: true
-        type: string
-      new-tag:
-        required: true
-        type: string
-      IMAGE_NAME:
-        required: true
-        type: string
-
 env:
   REGISTRY: ghcr.io
 
@@ -49,13 +37,12 @@ jobs:
       - name: Fetch existing tags
         id: fetch-tags
         run: |
-            IMAGE_NAME = ${{ inputs.IMAGE_NAME }}
             DATE=$date
             PREFIX="${DATE}-acc"
             
             # Fetch existing tags from GHCR
             EXISTING_TAGS=$(gh api --header "Accept: application/vnd.github+json" \
-              /user/packages/container/${IMAGE_NAME}/versions | jq -r '.[].metadata.container.tags[]' | grep "^${PREFIX}-")
+              /user/packages/container/${{ inputs.IMAGE_NAME }}/versions | jq -r '.[].metadata.container.tags[]' | grep "^${PREFIX}-")
             
             echo "TAGS : $EXISTING_TAGS";
             if [[ -z "$EXISTING_TAGS" ]]; then
