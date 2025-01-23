@@ -56,62 +56,73 @@ jobs:
           TAG="acc-${DATE}-${TIME}"
           echo "tag=$TAG" >> "$GITHUB_OUTPUT"
 
-  check-image-is-recent:
+  check-image-be:
     needs: set-environment
-    uses: ./.github/workflows/CheckLastCreation.yml
+    uses: ./.github/workflows/check-last-creation.yml
     with:
       image-tag: latest
       IMAGE_NAME: ghcr.io/3t-operations-team/desk-bookings-be
     secrets: inherit
 
+  check-image-fe:
+    needs: set-environment
+    uses: ./.github/workflows/check-last-creation.yml
+    with:
+      image-tag: latest
+      IMAGE_NAME: ghcr.io/3t-operations-team/desk-bookings-fe
+    secrets: inherit
 
-  #  run-deploy-in-environment:
-#    needs: set-environment
-#    uses: 3T-Operations-Team/desk-bookings-system/.github/workflows/release-stage.yml@main
-#    secrets: inherit
-#    with:
-#      EB_APP_FE: ${{ vars.EB_APP_FE }}
-#      EB_APP_BE: ${{ vars.EB_APP_BE }}
-#      EB_ENV_FE: ${{ needs.set-environment.outputs.acc_env_fe }}
-#      EB_ENV_BE: ${{ needs.set-environment.outputs.acc_env_be }}
-#
-#  run-smoke-test:
-#    needs:
-#      - run-deploy-in-environment
-#      - set-environment
-#    uses: ./.github/workflows/smoke-test-on-host.yml
-#    with:
-#      EB_ENV: ${{ needs.set-environment.outputs.acc_env_fe }}
-#      BE_URL: ${{ needs.set-environment.outputs.acc_env_be }}
-#    secrets: inherit
-#
-#  run-acceptance-test:
-#    needs:
-#      - run-smoke-test
-#      - set-environment
-#    uses: ./.github/workflows/acceptance-test-on-host.yml
-#    with:
-#      EB_ENV: ${{ needs.set-environment.outputs.acc_env_fe }}
-#    secrets: inherit
-#
-#  on-acceptance-success-tag-fe:
-#    needs:
-#      - set-environment
-#      - run-acceptance-test
-#    uses: ./.github/workflows/update-tag.yml
-#    with:
-#      image-tag: latest
-#      new-tag: ${{needs.set-environment.outputs.tag}}
-#      IMAGE_NAME: ghcr.io/3t-operations-team/desk-bookings-fe
-#    secrets: inherit
 
-#  on-acceptance-success-tag-be:
-#    needs:
-##      - run-acceptance-test
-#      - set-environment
-#    uses: ./.github/workflows/update-tag.yml
-#    with:
-#      image-tag: latest
-#      new-tag: ${{needs.set-environment.outputs.tag}}
-#      IMAGE_NAME: ghcr.io/3t-operations-team/desk-bookings-be
-#    secrets: inherit
+  run-deploy-in-environment:
+    needs:
+        - set-environment
+        - check-image-be
+        - check-image-fe
+    uses: 3T-Operations-Team/desk-bookings-system/.github/workflows/release-stage.yml@main
+    secrets: inherit
+    with:
+      EB_APP_FE: ${{ vars.EB_APP_FE }}
+      EB_APP_BE: ${{ vars.EB_APP_BE }}
+      EB_ENV_FE: ${{ needs.set-environment.outputs.acc_env_fe }}
+      EB_ENV_BE: ${{ needs.set-environment.outputs.acc_env_be }}
+
+  run-smoke-test:
+    needs:
+      - run-deploy-in-environment
+      - set-environment
+    uses: ./.github/workflows/smoke-test-on-host.yml
+    with:
+      EB_ENV: ${{ needs.set-environment.outputs.acc_env_fe }}
+      BE_URL: ${{ needs.set-environment.outputs.acc_env_be }}
+    secrets: inherit
+
+  run-acceptance-test:
+    needs:
+      - run-smoke-test
+      - set-environment
+    uses: ./.github/workflows/acceptance-test-on-host.yml
+    with:
+      EB_ENV: ${{ needs.set-environment.outputs.acc_env_fe }}
+    secrets: inherit
+
+  on-acceptance-success-tag-fe:
+    needs:
+      - set-environment
+      - run-acceptance-test
+    uses: ./.github/workflows/update-tag.yml
+    with:
+      image-tag: latest
+      new-tag: ${{needs.set-environment.outputs.tag}}
+      IMAGE_NAME: ghcr.io/3t-operations-team/desk-bookings-fe
+    secrets: inherit
+
+  on-acceptance-success-tag-be:
+    needs:
+      - run-acceptance-test
+      - set-environment
+    uses: ./.github/workflows/update-tag.yml
+    with:
+      image-tag: latest
+      new-tag: ${{needs.set-environment.outputs.tag}}
+      IMAGE_NAME: ghcr.io/3t-operations-team/desk-bookings-be
+    secrets: inherit

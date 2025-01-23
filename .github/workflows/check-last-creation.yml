@@ -1,5 +1,5 @@
 # this workflow gets image with "image tag" input and tag it with new-tag.
-name: Check if docker image is recent
+name: docker image is recent
 on:
   workflow_call:
     inputs:
@@ -14,7 +14,7 @@ env:
   REGISTRY: ghcr.io
 
 jobs:
-  update:
+  checking:
     runs-on: ubuntu-latest
 
     steps:
