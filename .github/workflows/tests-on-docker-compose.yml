@@ -1,4 +1,4 @@
-name: Run Acceptance Test on docker compose
+name: Acceptance Test on docker compose
 
 on:
   workflow_dispatch:

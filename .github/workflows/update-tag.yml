@@ -1,5 +1,4 @@
-# this workflow gets the latest tagged image and
-# then push the new tag. And also point it to latest if it is not.
+# this workflow gets image with "image tag" input and tag it with new-tag.
 name: Update tag
 on:
   workflow_call:
@@ -28,12 +27,6 @@ jobs:
           registry: ${{ env.REGISTRY }}
           username: ${{ github.actor }}
           password: ${{ secrets.GITHUB_TOKEN }}
-
-      - name: Debug inputs
-        run: |
-          echo "IMAGE_NAME: ${{ inputs.IMAGE_NAME }}"
-          echo "new-tag: ${{ inputs.new-tag }}"
-
       - name: Pull Docker Image
         run: |
             docker pull ${{ inputs.IMAGE_NAME }}:${{ inputs.image-tag }}

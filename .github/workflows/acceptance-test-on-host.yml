@@ -1,4 +1,4 @@
-name: Run Acceptance Test on this Host
+name: Acceptance Test on this Host
 on:
   workflow_call:
     inputs:
