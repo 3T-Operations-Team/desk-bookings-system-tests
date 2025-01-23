@@ -31,7 +31,6 @@ Feature: Employee login
       And the employee tries to login
       Then the employee remains on the login page
       And the employee is not logged into their account
-      And a login error message is displayed
 
     Scenario: Employee logs in with incorrect password
       Given the employee is on the login page
@@ -39,4 +38,3 @@ Feature: Employee login
       And the employee enters an incorrect password
       Then the employee remains on the login page
       And the employee is not logged into their account
-      And a login error message is displayed

@@ -61,8 +61,6 @@ Then("the employee is not logged into their account", () => {
   cy.get("button").contains(Cypress.env("TEST_USER_EMAIL")).should("not.exist");
 });
 
-Then("a login error message is displayed", () => {});
-
 Then("the employee is redirected to the login page", () => {
   cy.location("pathname").should("eq", "/login");
 });
