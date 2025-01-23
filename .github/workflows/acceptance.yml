@@ -82,7 +82,7 @@ jobs:
       - check-image-be
       - check-image-fe
     outputs:
-      proceed: ${{ steps.determine.outputs.proceed }} || ${{ steps.determine-fe.outputs.proceed }}
+      proceed: ${{ steps.determine.outputs.proceed }} && ${{ steps.determine-fe.outputs.proceed }}
     steps:
       - name: Download run be File
         uses: actions/download-artifact@v4
