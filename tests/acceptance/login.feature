@@ -18,6 +18,7 @@ Feature: Employee login
 
   Scenario: Employee logs out
     Given the employee is logged in
+    And the employee is on the desk booking page
     When the employee logs out
     Then the employee is redirected to the login page
 
