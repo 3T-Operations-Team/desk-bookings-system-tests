@@ -32,16 +32,17 @@ jobs:
           compose-file: "./docker-compose.yml"
           down-flags: "--volumes"
         env:
-          SENDGRID_HOST: ${{ vars.SENDGRID_HOST }}
+          SENDGRID_HOST: ${{ vars.SENDGRID_HOST_MOCK }}
 
       - name: Run all cypress tests
         uses: cypress-io/github-action@v6
         env:
-          CYPRESS_host: http://localhost:7070
-          CYPRESS_be_host: http://localhost:8080
+          CYPRESS_HOST: http://localhost:7070
+          CYPRESS_BE_HOST: http://localhost:8080
           CYPRESS_TEST_USER_EMAIL: test@example.com
           CYPRESS_TEST_USER_TOKEN: Basic dGVzdEBleGFtcGxlLmNvbToxMjM=
           CYPRESS_TEST_USER_PASSWORD: 123
+          CYPRESS_SENDGRID_HOST: ${{ vars.SENDGRID_HOST_MOCK }}
           LIBGL_ALWAYS_SOFTWARE: 1
 
       - name: upload screenshot

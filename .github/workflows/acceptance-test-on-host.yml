@@ -17,7 +17,7 @@ jobs:
       - name: Cypress run in env
         uses: cypress-io/github-action@v6
         env:
-          CYPRESS_host: http://${{ inputs.EB_ENV }}.${{ secrets.AWS_REGION }}.elasticbeanstalk.com
+          CYPRESS_HOST: http://${{ inputs.EB_ENV }}.${{ secrets.AWS_REGION }}.elasticbeanstalk.com
           CYPRESS_TEST_USER_EMAIL: ${{ secrets.CYPRESS_TEST_USER_EMAIL }}
           CYPRESS_TEST_USER_TOKEN: ${{ secrets.CYPRESS_TEST_USER_TOKEN }}
           LIBGL_ALWAYS_SOFTWARE: 1

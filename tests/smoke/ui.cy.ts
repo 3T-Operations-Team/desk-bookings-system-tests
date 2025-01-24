@@ -1,6 +1,6 @@
 describe("Login page", () => {
   beforeEach(() => {
-    cy.visit(Cypress.env("host"));
+    cy.visit(Cypress.env("HOST"));
   });
 
   it("should be able to see the log in page", () => {
