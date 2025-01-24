@@ -16,11 +16,11 @@ on:
   schedule:
     - cron: "0 1/2 * * 1-5"
   workflow_dispatch:
-   inputs:
-     e2e:
-       description: "Check to run acceptance on end to end environment"
-       type: boolean
-       required: true
+    inputs:
+      e2e:
+        description: "Check to run acceptance on end to end environment"
+        type: boolean
+        required: true
 
 jobs:
   set-environment:
@@ -40,7 +40,7 @@ jobs:
               echo "Using e2e input value."
               e2e=${{ inputs.e2e }}
           fi
-          
+
           if [ "$e2e" == "true" ]; then
               echo "acc_env_fe=${{ vars.EB_ENV_ACCEPTANCE_FE }}" >> "$GITHUB_OUTPUT"
               echo "acc_env_be=${{ vars.EB_ENV_ACCEPTANCE_BE }}" >> "$GITHUB_OUTPUT"
@@ -67,8 +67,8 @@ jobs:
 
   check-image-fe:
     needs:
-        - set-environment
-        - check-image-be
+      - set-environment
+      - check-image-be
     uses: ./.github/workflows/check-last-creation.yml
     with:
       image-tag: latest
@@ -112,8 +112,8 @@ jobs:
           fi
   run-deploy-in-environment:
     needs:
-        - set-environment
-        - condition-check
+      - set-environment
+      - condition-check
     if: needs.condition-check.outputs.proceed == 'true'
     uses: 3T-Operations-Team/desk-bookings-system/.github/workflows/release-stage.yml@main
     secrets: inherit
@@ -131,6 +131,7 @@ jobs:
     with:
       EB_ENV: ${{ needs.set-environment.outputs.acc_env_fe }}
       BE_URL: ${{ needs.set-environment.outputs.acc_env_be }}
+      SENDGRID_HOST: ${{ vars.SENDGRID_HOST_MOCK }}
     secrets: inherit
 
   run-acceptance-test:
