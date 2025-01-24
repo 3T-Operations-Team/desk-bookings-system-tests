@@ -30,8 +30,8 @@ jobs:
           CYPRESS_TEST_USER_EMAIL: ${{ secrets.CYPRESS_TEST_USER_EMAIL }}
           CYPRESS_TEST_USER_PASSWORD: ${{ secrets.CYPRESS_TEST_USER_PASSWORD }}
           CYPRESS_TEST_USER_TOKEN: ${{ secrets.CYPRESS_TEST_USER_TOKEN }}
-          CYPRESS_SENDGRID_HOST: ${{ input.SENDGRID_HOST }}
-          CYPRESS_SENDGRID_TOKEN: ${{ input.SENDGRID_TOKEN }}
+          CYPRESS_SENDGRID_HOST: ${{ inputs.SENDGRID_HOST }}
+          CYPRESS_SENDGRID_TOKEN: ${{ inputs.SENDGRID_TOKEN }}
           LIBGL_ALWAYS_SOFTWARE: 1
         with:
           spec: tests/smoke/*
