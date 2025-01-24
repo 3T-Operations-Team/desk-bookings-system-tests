@@ -11,11 +11,13 @@ Before(() => {
 });
 
 Given("I am logged in and on the main page", () => {
-  cy.visit(Cypress.env("host"));
+  cy.visit(Cypress.env("HOST"));
 });
 
-Given("I select an available desk", () => {
-  cy.get(".desk").contains("Flex 27").click();
+Given("I select desk {int}", (deskNbr) => {
+  cy.get(".desk")
+    .contains("Flex " + deskNbr)
+    .click();
 });
 
 When("I make a booking", () => {
