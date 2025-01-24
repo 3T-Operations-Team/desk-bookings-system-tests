@@ -3,7 +3,7 @@ Feature: Booking functionality
   @acceptance
   Scenario: Book a desk
     Given I am logged in and on the main page
-    And I select an available desk
+    And I select desk 27
     When I make a booking
     Then I should receive a booking confirmation
 
