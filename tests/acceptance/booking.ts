@@ -11,7 +11,7 @@ Before(() => {
 });
 
 Given("I am logged in and on the main page", () => {
-  cy.visit(Cypress.env("host"));
+  cy.visit(Cypress.env("HOST"));
 });
 
 Given("I select an available desk", () => {

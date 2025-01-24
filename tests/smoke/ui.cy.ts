@@ -36,7 +36,7 @@ describe("Main page", () => {
       "logedUserToken",
       Cypress.env("TEST_USER_TOKEN"),
     );
-    cy.visit(Cypress.env("host"));
+    cy.visit(Cypress.env("HOST"));
   });
 
   it("should be able to see main page", () => {

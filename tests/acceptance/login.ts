@@ -1,7 +1,7 @@
 import { When, Then, Given } from "@badeball/cypress-cucumber-preprocessor";
 
 Given("the employee is on the login page", () => {
-  cy.visit(Cypress.env("host"));
+  cy.visit(Cypress.env("HOST"));
 });
 
 Given("the employee is logged in", () => {
@@ -10,7 +10,7 @@ Given("the employee is logged in", () => {
 });
 
 Given("the employee is on the desk booking page", () => {
-  cy.visit(Cypress.env("host"));
+  cy.visit(Cypress.env("HOST"));
 });
 
 When("the employee enters their correct email", () => {
@@ -28,7 +28,7 @@ When("the employee tries to login", () => {
 });
 
 When("the employee navigates to the login page", () => {
-  cy.visit(Cypress.env("host") + "/login");
+  cy.visit(Cypress.env("HOST") + "/login");
 });
 
 When("the employee enters an incorrect email", () => {
