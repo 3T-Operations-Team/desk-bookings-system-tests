@@ -56,23 +56,23 @@ jobs:
           
           # Check if the image was created within the last 2 hours (7200 seconds)
           if [ $TIME_DIFF -lt 7200 ]; then
-            echo "run_further=true" >> ${{ inputs.file_name }}
+            echo "run_further=true" >> ${{ inputs.file_name }}.txt
           else
-            echo "run_further=false" >> ${{ inputs.file_name }}
+            echo "run_further=false" >> ${{ inputs.file_name }}.txt
             echo "Image was created more than 2 hours ago. No further actions."
           fi
       - name: Upload File
         uses: actions/upload-artifact@v4
-        if: ${{inputs.e2e}} == 'true'
+        if: ${{github.event.inputs.e2e}} == 'true'
         with:
-            name: ${{ inputs.file_name }}_e2e
-            path: ${{ inputs.file_name }}
+            name: ${{ inputs.file_name }}_e2e.txt
+            path: ${{ inputs.file_name }}.txt
             overwrite: true
 
       - name: Upload File
         uses: actions/upload-artifact@v4
-        if: ${{inputs.e2e}} == 'false'
+        if: ${{github.event.inputs.e2e}} == 'false'
         with:
-          name: ${{ inputs.file_name }}
-          path: ${{ inputs.file_name }}
+          name: ${{ inputs.file_name }}.txt
+          path: ${{ inputs.file_name }}.txt
           overwrite: true

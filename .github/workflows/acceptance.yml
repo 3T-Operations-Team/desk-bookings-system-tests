@@ -7,6 +7,7 @@ on:
         description: "Check to run acceptance on end to end environment"
         type: boolean
         required: true
+        default: false
 
 jobs:
   set-environment:
@@ -41,8 +42,8 @@ jobs:
     with:
       image-tag: latest
       IMAGE_NAME: ghcr.io/3t-operations-team/desk-bookings-be
-      file_name: run_be.txt
-      e2e: ${{inputs.e2e}}
+      file_name: run_be
+      e2e: ${{github.event.inputs.e2e}}
     secrets: inherit
 
   check-image-fe:
@@ -53,8 +54,8 @@ jobs:
     with:
       image-tag: latest
       IMAGE_NAME: ghcr.io/3t-operations-team/desk-bookings-fe
-      file_name: run_fe.txt
-      e2e : ${{inputs.e2e}}
+      file_name: run_fe
+      e2e : ${{github.event.inputs.e2e}}
     secrets: inherit
 
   condition-check:
