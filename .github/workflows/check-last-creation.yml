@@ -16,7 +16,7 @@ env:
   REGISTRY: ghcr.io
 
 jobs:
-  checking:
+  check-last-updated:
     runs-on: ubuntu-latest
     steps:
       - name: Registry login
