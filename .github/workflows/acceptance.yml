@@ -72,9 +72,11 @@ jobs:
         run: |
           if grep -q "false" run_be.txt; then
             echo "proceed=false" >> $GITHUB_OUTPUT
-            exit 3
+            echo "skip=true" >> skip.txt
+            exit 0
           else
             echo "proceed=true" >> $GITHUB_OUTPUT
+            echo "skip=false" >> skip.txt
           fi
       - name: Download run fe File
         uses: actions/download-artifact@v4
@@ -85,10 +87,20 @@ jobs:
         run: |
           if grep -q "false" run_fe.txt; then
             echo "proceed=false" >> $GITHUB_OUTPUT
+            echo "skip=true" >> skip.txt
             exit 0
           else
             echo "proceed=true" >> $GITHUB_OUTPUT
+            echo "skip=false" >> skip.txt
           fi
+
+      - name: Upload File
+        uses: actions/upload-artifact@v4
+        with:
+          name: skip.txt
+          path: skip.txt
+
+
   run-deploy-in-environment:
     needs:
       - set-environment
