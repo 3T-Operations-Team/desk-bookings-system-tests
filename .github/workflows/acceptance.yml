@@ -98,14 +98,14 @@ jobs:
 
       - name: Upload File
         uses: actions/upload-artifact@v4
-        if: inputs.e2e=='true'
+        if: ${{inputs.e2e}} == 'true'
         with:
           name: skip.txt
           path: e2e/skip.txt
 
       - name: Upload File
         uses: actions/upload-artifact@v4
-        if: inputs.e2e=='false'
+        if: ${{inputs.e2e}} == 'false'
         with:
           name: skip.txt
           path: skip.txt
@@ -124,7 +124,7 @@ jobs:
       EB_ENV_BE: ${{ needs.set-environment.outputs.acc_env_be }}
 
   run-smoke-test:
-    if: inputs.e2e == 'false'
+    if: ${{inputs.e2e}} == 'false'
     needs:
       - run-deploy-in-environment
       - set-environment
@@ -136,7 +136,7 @@ jobs:
     secrets: inherit
 
   run-acceptance-test:
-    if: inputs.e2e == 'false'
+    if: ${{inputs.e2e}} == 'false'
     needs:
       - run-smoke-test
       - set-environment
@@ -146,7 +146,7 @@ jobs:
     secrets: inherit
 
   run-e2e-test:
-    if: inputs.e2e == 'true'
+    if: ${{inputs.e2e}} == 'true'
     needs:
       - run-smoke-test
       - set-environment
