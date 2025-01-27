@@ -91,7 +91,7 @@ jobs:
       - name: Determine If Deployment Should Proceed for BE
         id: determine-be
         run: |
-          if grep -q "false" $GITHUB_ENV.artifact_name_be; then
+          if grep -q "false" $env.artifact_name_be; then
             echo "proceed-be=false" >> $GITHUB_OUTPUT
             echo "skip-be=true" >> skip.txt
             exit 0
@@ -102,7 +102,7 @@ jobs:
       - name: Determine If Deployment Should Proceed for fe
         id: determine-fe
         run: |
-          if grep -q "false" $GITHUB_ENV.artifact_name_fe; then
+          if grep -q "false" $env.artifact_name_fe; then
             echo "proceed-fe=false" >> $GITHUB_OUTPUT
             echo "skip-fe=true" >> skip.txt
             exit 0

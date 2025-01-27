@@ -63,7 +63,7 @@ jobs:
           fi
       - name: Upload File
         uses: actions/upload-artifact@v4
-        if: ${{inputs.e2e}} == true
+        if: ${{ inputs.e2e == 'true' }}
         with:
             name: ${{ inputs.file_name }}_e2e.txt
             path: ${{ inputs.file_name }}.txt
@@ -71,7 +71,7 @@ jobs:
 
       - name: Upload File
         uses: actions/upload-artifact@v4
-        if: ${{inputs.e2e}} == false
+        if: ${{ inputs.e2e == 'false' }}
         with:
           name: ${{ inputs.file_name }}.txt
           path: ${{ inputs.file_name }}.txt
