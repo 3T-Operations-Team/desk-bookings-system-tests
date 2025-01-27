@@ -42,7 +42,7 @@ jobs:
       image-tag: latest
       IMAGE_NAME: ghcr.io/3t-operations-team/desk-bookings-be
       file_name: run_be.txt
-      e2e: inputs.e2e
+      e2e: ${{inputs.e2e}}
     secrets: inherit
 
   check-image-fe:
@@ -54,7 +54,7 @@ jobs:
       image-tag: latest
       IMAGE_NAME: ghcr.io/3t-operations-team/desk-bookings-fe
       file_name: run_fe.txt
-      e2e : inputs.e2e
+      e2e : ${{inputs.e2e}}
     secrets: inherit
 
   condition-check:
