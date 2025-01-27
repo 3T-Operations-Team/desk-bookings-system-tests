@@ -19,26 +19,4 @@ jobs:
     with:
       e2e: true
 
-  on-acceptance-success-tag-fe:
-    needs:
-      - run-acceptance-environment
-      - run-e2e-environment
-    uses: ./.github/workflows/update-tag.yml
-    with:
-      image-tag: latest
-      new-tag: ${{needs.set-environment.outputs.tag}}
-      IMAGE_NAME: ghcr.io/3t-operations-team/desk-bookings-fe
-    secrets: inherit
-
-  on-acceptance-success-tag-be:
-    needs:
-      - run-acceptance-environment
-      - run-e2e-environment
-    uses: ./.github/workflows/update-tag.yml
-    with:
-      image-tag: latest
-      new-tag: ${{needs.set-environment.outputs.tag}}
-      IMAGE_NAME: ghcr.io/3t-operations-team/desk-bookings-be
-    secrets: inherit
-
 
