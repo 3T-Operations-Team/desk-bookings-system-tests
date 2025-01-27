@@ -63,58 +63,72 @@ jobs:
       - check-image-be
       - check-image-fe
     outputs:
-      proceed: ${{ steps.determine.outputs.proceed }} && ${{ steps.determine-fe.outputs.proceed }}
+      proceed-be: ${{ steps.determine.outputs.proceed-be }}
+      proceed-fe: ${{ steps.determine.outputs.proceed-fe }}
     steps:
-      - name: Download run be File
+      - name: Set artifact filename based on e2e value
+        id: set-filename
+        run: |
+            if [ "${{ inputs.e2e }}" == "true" ]; then
+              echo "artifact_name_be=run_be_e2e.txt" >> $GITHUB_ENV
+              echo "artifact_name_fe=run_fe_e2e.txt" >> $GITHUB_ENV
+            else
+              echo "artifact_name_be=run_be.txt" >> $GITHUB_ENV
+              echo "artifact_name_fe=run_fe.txt" >> $GITHUB_ENV
+            fi
+
+      - name: Download run BE File
         uses: actions/download-artifact@v4
         with:
-          name: run_be.txt
-      - name: Determine If Deployment Should Proceed for fe
+          name: ${{ env.artifact_name_be}}
+
+      - name: Download run FE File
+        uses: actions/download-artifact@v4
+        with:
+          name: ${{ env.artifact_name_be}}
+
+      - name: Determine If Deployment Should Proceed for BE
         id: determine-be
         run: |
-          if grep -q "false" run_be.txt; then
-            echo "proceed=false" >> $GITHUB_OUTPUT
-            echo "skip=true" >> skip.txt
+          if grep -q "false" $GITHUB_ENV.artifact_name_be; then
+            echo "proceed-be=false" >> $GITHUB_OUTPUT
+            echo "skip-be=true" >> skip.txt
             exit 0
           else
-            echo "proceed=true" >> $GITHUB_OUTPUT
-            echo "skip=false" >> skip.txt
+            echo "proceed-be=true" >> $GITHUB_OUTPUT
+            echo "skip-be=false" >> skip.txt
           fi
-      - name: Download run fe File
-        uses: actions/download-artifact@v4
-        with:
-          name: run_fe.txt
       - name: Determine If Deployment Should Proceed for fe
         id: determine-fe
         run: |
-          if grep -q "false" run_fe.txt; then
-            echo "proceed=false" >> $GITHUB_OUTPUT
-            echo "skip=true" >> skip.txt
+          if grep -q "false" $GITHUB_ENV.artifact_name_fe; then
+            echo "proceed-fe=false" >> $GITHUB_OUTPUT
+            echo "skip-fe=true" >> skip.txt
             exit 0
           else
-            echo "proceed=true" >> $GITHUB_OUTPUT
-            echo "skip=false" >> skip.txt
+            echo "proceed-fe=true" >> $GITHUB_OUTPUT
+            echo "skip-fe=false" >> skip.txt
           fi
 
       - name: Upload File
         uses: actions/upload-artifact@v4
         if: ${{inputs.e2e}} == 'true'
         with:
-          name: skip.txt
-          path: e2e/skip.txt
+          name: skip_e2e.txt
+          path: skip.txt
 
       - name: Upload File
         uses: actions/upload-artifact@v4
         if: ${{inputs.e2e}} == 'false'
         with:
-          name: skip.txt
+          name: skip_acceptance.txt
           path: skip.txt
 
   run-deploy-in-environment:
     needs:
       - set-environment
       - condition-check
-    if: needs.condition-check.outputs.proceed == 'true'
+    if: needs.condition-check.outputs.proceed-be == 'true' && needs.condition-check.outputs.proceed-fe == 'true'
     uses: 3T-Operations-Team/desk-bookings-system/.github/workflows/release-stage.yml@main
     secrets: inherit
     with:

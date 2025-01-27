@@ -25,27 +25,43 @@ jobs:
       - run-e2e-environment
       - run-acceptance-environment
     outputs:
-      proceed: ${{ steps.determine.outputs.proceed }}
+      tag-fe: ${{ steps.determine.outputs.tag-fe }}
+      tag-be: ${{ steps.determine.outputs.tag-be }}
     steps:
-      - name: Download skip file
+      - name: Download skip acceptance file
         uses: actions/download-artifact@v4
         with:
-          name: skip.txt
+          name: skip-acceptance.txt
+      - name: Download skip e2e file
+        uses: actions/download-artifact@v4
+        with:
+          name: skip-e2e.txt
       - name: Determine tags are needed
         id: determine
         run: |
-          if grep -q "false" skip.txt; then
-            echo "proceed=false" >> $GITHUB_OUTPUT
-            exit 0
+          proceed_fe_acceptance=$(grep -oP '(?<=proceed-fe=)[a-zA-Z]+' skip-acceptance.txt)
+          proceed_fe_e2e=$(grep -oP '(?<=proceed-fe=)[a-zA-Z]+' skip-e2e.txt)
+          
+          if [[ "$proceed_fe_acceptance" == "false" || "$proceed_fe_e2e" == "false" ]]; then
+            echo "tag-fe=false" >> $GITHUB_OUTPUT
           else
-            echo "proceed=true" >> $GITHUB_OUTPUT
+            echo "tag-fe=true" >> $GITHUB_OUTPUT
+          fi
+          
+          proceed_be_acceptance=$(grep -oP '(?<=proceed-be=)[a-zA-Z]+' skip-acceptance.txt)
+          proceed_be_e2e=$(grep -oP '(?<=proceed-be=)[a-zA-Z]+' skip-e2e.txt)
+
+          if [[ "$proceed_be_acceptance" == "false" || "$proceed_be_e2e" == "false" ]]; then
+            echo "tag-be=false" >> $GITHUB_OUTPUT
+          else
+            echo "tag-be=true" >> $GITHUB_OUTPUT
           fi
   on-acceptance-success-tag-fe:
     needs:
       - run-acceptance-environment
       - run-e2e-environment
       - tag-update-check
-    if: needs.tag-update-check.outputs.proceed == 'true'
+    if: needs.tag-update-check.outputs.tag-fe == 'true'
     uses: ./.github/workflows/update-tag.yml
     with:
       image-tag: latest
@@ -58,7 +74,7 @@ jobs:
       - run-acceptance-environment
       - run-e2e-environment
       - tag-update-check
-    if: needs.tag-update-check.outputs.proceed == 'true'
+    if: needs.tag-update-check.outputs.tag-be == 'true'
     uses: ./.github/workflows/update-tag.yml
     with:
       image-tag: latest

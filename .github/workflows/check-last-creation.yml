@@ -65,8 +65,9 @@ jobs:
         uses: actions/upload-artifact@v4
         if: ${{inputs.e2e}} == 'true'
         with:
-            name: ${{ inputs.file_name }}
-            path: e2e/${{ inputs.file_name }}
+            name: ${{ inputs.file_name }}_e2e
+            path: ${{ inputs.file_name }}
+            overwrite: true
 
       - name: Upload File
         uses: actions/upload-artifact@v4
@@ -74,3 +75,4 @@ jobs:
         with:
           name: ${{ inputs.file_name }}
           path: ${{ inputs.file_name }}
+          overwrite: true
