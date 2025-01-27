@@ -42,6 +42,7 @@ jobs:
       image-tag: latest
       IMAGE_NAME: ghcr.io/3t-operations-team/desk-bookings-be
       file_name: run_be.txt
+      e2e: inputs.e2e
     secrets: inherit
 
   check-image-fe:
@@ -53,6 +54,7 @@ jobs:
       image-tag: latest
       IMAGE_NAME: ghcr.io/3t-operations-team/desk-bookings-fe
       file_name: run_fe.txt
+      e2e : inputs.e2e
     secrets: inherit
 
   condition-check:
@@ -96,10 +98,17 @@ jobs:
 
       - name: Upload File
         uses: actions/upload-artifact@v4
+        if: inputs.e2e=='true'
+        with:
+          name: skip.txt
+          path: e2e/skip.txt
+
+      - name: Upload File
+        uses: actions/upload-artifact@v4
+        if: inputs.e2e=='false'
         with:
           name: skip.txt
           path: skip.txt
-
 
   run-deploy-in-environment:
     needs:

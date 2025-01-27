@@ -11,6 +11,10 @@ on:
         type: string
       file_name:
         type: string
+      e2e:
+        description: "Check to run acceptance on end to end environment"
+        type: boolean
+        required: true
 
 env:
   REGISTRY: ghcr.io
@@ -59,6 +63,14 @@ jobs:
           fi
       - name: Upload File
         uses: actions/upload-artifact@v4
+        if: inputs.e2e == 'true'
         with:
             name: ${{ inputs.file_name }}
-            path: ${{ inputs.file_name }}
+            path: e2e/${{ inputs.file_name }}
+
+      - name: Upload File
+        uses: actions/upload-artifact@v4
+        if: inputs.e2e == 'false'
+        with:
+          name: ${{ inputs.file_name }}
+          path: ${{ inputs.file_name }}
