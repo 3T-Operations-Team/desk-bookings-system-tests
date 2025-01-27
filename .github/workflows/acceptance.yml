@@ -1,21 +1,7 @@
-# this stage is run before uat-stage and production stage
-# in an acceptance environment.
-#
-# 1. pass input env var
-#
-# 2. trigger Release System on this environment
-#    Release External System Stubs (this is a placeholder step, no actions at the moment)
-#    Checkout System Test Repository
-#    Run Smoke Tests
-#    Run Acceptance Tests
-# 3. Tag the
-# todo : when e2e acceptance available, change line 44
-name: Acceptance Stage
+name: running acceptance on env
 
 on:
-  schedule:
-    - cron: "0 1/2 * * 1-5"
-  workflow_dispatch:
+  workflow_call:
     inputs:
       e2e:
         description: "Check to run acceptance on end to end environment"
@@ -33,14 +19,7 @@ jobs:
       - name: Set environment variables
         id: set-env
         run: |
-          if [ "${{ github.event_name }}" == "schedule" ]; then
-              echo "Scheduled event detected. Defaulting e2e to false."
-              e2e=false
-          else
-              echo "Using e2e input value."
-              e2e=${{ inputs.e2e }}
-          fi
-
+          
           if [ "$e2e" == "true" ]; then
               echo "acc_env_fe=${{ vars.EB_ENV_ACCEPTANCE_FE }}" >> "$GITHUB_OUTPUT"
               echo "acc_env_be=${{ vars.EB_ENV_ACCEPTANCE_BE }}" >> "$GITHUB_OUTPUT"
@@ -106,7 +85,7 @@ jobs:
         run: |
           if grep -q "false" run_fe.txt; then
             echo "proceed=false" >> $GITHUB_OUTPUT
-            exit 0
+            exit 1
           else
             echo "proceed=true" >> $GITHUB_OUTPUT
           fi
@@ -124,6 +103,7 @@ jobs:
       EB_ENV_BE: ${{ needs.set-environment.outputs.acc_env_be }}
 
   run-smoke-test:
+    if: inputs.e2e == 'false'
     needs:
       - run-deploy-in-environment
       - set-environment
@@ -135,6 +115,7 @@ jobs:
     secrets: inherit
 
   run-acceptance-test:
+    if: inputs.e2e == 'false'
     needs:
       - run-smoke-test
       - set-environment
@@ -143,24 +124,12 @@ jobs:
       EB_ENV: ${{ needs.set-environment.outputs.acc_env_fe }}
     secrets: inherit
 
-  on-acceptance-success-tag-fe:
+  run-e2e-test:
+    if: inputs.e2e == 'true'
     needs:
+      - run-smoke-test
       - set-environment
-      - run-acceptance-test
-    uses: ./.github/workflows/update-tag.yml
+    uses: ./.github/workflows/e2e-test-on-host.yml
     with:
-      image-tag: latest
-      new-tag: ${{needs.set-environment.outputs.tag}}
-      IMAGE_NAME: ghcr.io/3t-operations-team/desk-bookings-fe
-    secrets: inherit
-
-  on-acceptance-success-tag-be:
-    needs:
-      - run-acceptance-test
-      - set-environment
-    uses: ./.github/workflows/update-tag.yml
-    with:
-      image-tag: latest
-      new-tag: ${{needs.set-environment.outputs.tag}}
-      IMAGE_NAME: ghcr.io/3t-operations-team/desk-bookings-be
+      EB_ENV: ${{ needs.set-environment.outputs.acc_env_fe }}
     secrets: inherit

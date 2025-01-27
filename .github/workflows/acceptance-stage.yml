@@ -1,0 +1,44 @@
+name: Acceptance Stage
+
+on:
+    schedule:
+      - cron: "0 1/2 * * 1-5"
+    workflow_dispatch:
+
+
+jobs:
+  run-acceptance-environment:
+    uses: ./.github/workflows/acceptance.yml
+    with:
+      e2e: false
+
+  run-e2e-environment:
+    needs:
+      - run-acceptance-environment
+    uses: ./.github/workflows/acceptance.yml
+    with:
+      e2e: true
+
+  on-acceptance-success-tag-fe:
+    needs:
+      - run-acceptance-environment
+      - run-e2e-environment
+    uses: ./.github/workflows/update-tag.yml
+    with:
+      image-tag: latest
+      new-tag: ${{needs.set-environment.outputs.tag}}
+      IMAGE_NAME: ghcr.io/3t-operations-team/desk-bookings-fe
+    secrets: inherit
+
+  on-acceptance-success-tag-be:
+    needs:
+      - run-acceptance-environment
+      - run-e2e-environment
+    uses: ./.github/workflows/update-tag.yml
+    with:
+      image-tag: latest
+      new-tag: ${{needs.set-environment.outputs.tag}}
+      IMAGE_NAME: ghcr.io/3t-operations-team/desk-bookings-be
+    secrets: inherit
+
+
