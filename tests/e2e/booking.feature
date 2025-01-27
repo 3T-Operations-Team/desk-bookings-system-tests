@@ -9,14 +9,16 @@ Feature: Employee books a desk
     And desk 29 is already booked by another employee
     When the employee selects desk 29
     Then desk 29 is not selected
-  #Scenario: Employee books a desk
-  #  Given the employee is logged in
-  #  And the employee is on the Desk Booking page
-  #  And desk 27 is available
-  #  When the employee selects desk 27
-  #  And the employee books the desk
-  #  Then the employee sees a confirmation message
-  #  And desk 27 is now reserved for the employee
+    And it is not possible to book desk
+
+  Scenario: Employee books a desk
+    Given the employee is logged in
+    And the employee is on the desk booking page
+    And desk 27 is available
+    When the employee selects desk 27
+    And the employee books the desk
+    Then the employee sees the message "Desk successfully booked"
+    And desk 27 is now reserved for the employee
   #Scenario: Emplyoee cannot book more than one desk for the same day
   #  Given the employee is logged in
   #  And the employee is on the Desk Booking page
