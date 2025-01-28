@@ -85,7 +85,7 @@ jobs:
       - name: Download run FE File
         uses: actions/download-artifact@v4
         with:
-          name: ${{ env.artifact_name_be}}
+          name: ${{ env.artifact_name_fe}}
 
       - name: Determine If Deployment Should Proceed for BE
         id: determine-be
@@ -110,19 +110,24 @@ jobs:
             echo "skip-fe=false" >> skip.txt
           fi
 
-      - name: Upload File
-        uses: actions/upload-artifact@v4
-        if: ${{inputs.e2e}} == true
-        with:
-          name: skip_e2e.txt
-          path: skip.txt
+      - name: Rename File Conditionally
+        run: |
+          if [[ "${{ inputs.e2e }}" == "false" ]]; then
+            mv skip.txt skip_acceptance.txt
+            echo "artifact_name=skip_acceptance.txt" >> $GITHUB_ENV
+          else
+            mv skip.txt skip_e2e.txt
+            echo "artifact_name=skip_e2e.txt" >> $GITHUB_ENV
+          fi
+
 
       - name: Upload File
         uses: actions/upload-artifact@v4
-        if: ${{inputs.e2e}} == false
         with:
-          name: skip_acceptance.txt
-          path: skip.txt
+          name: ${{ env.artifact_name }}
+          path: |
+            skip_acceptance.txt
+            skip_e2e.txt
 
   run-deploy-in-environment:
     needs:
