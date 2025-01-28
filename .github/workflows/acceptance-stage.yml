@@ -28,6 +28,10 @@ jobs:
       tag-fe: ${{ steps.determine.outputs.tag-fe }}
       tag-be: ${{ steps.determine.outputs.tag-be }}
     steps:
+      - name : Checkout this?
+        uses: actions/checkout@v4
+        with:
+          repository: 3T-Operations-Team/desk-bookings-system-tests
       - name: Download skip acceptance file
         uses: actions/download-artifact@v4
         with:
