@@ -19,10 +19,49 @@ jobs:
     with:
       e2e: true
 
+  tag-update-check:
+    runs-on: ubuntu-latest
+    needs:
+      - run-e2e-environment
+      - run-acceptance-environment
+    outputs:
+      tag-fe: ${{ steps.determine.outputs.tag-fe }}
+      tag-be: ${{ steps.determine.outputs.tag-be }}
+    steps:
+      - name: Download skip acceptance file
+        uses: actions/download-artifact@v4
+        with:
+          name: skip_acceptance.txt
+      - name: Download skip e2e file
+        uses: actions/download-artifact@v4
+        with:
+          name: skip_e2e.txt
+      - name: Determine tags are needed
+        id: determine
+        run: |
+          skip_fe_acceptance=$(grep -oP '(?<=skip-fe=)[a-zA-Z]+' skip_acceptance.txt)
+          skip_fe_e2e=$(grep -oP '(?<=skip-fe=)[a-zA-Z]+' skip_e2e.txt)
+          
+          if [[ "$skip_fe_acceptance" == "true" || "$skip_fe_e2e" == "true" ]]; then
+            echo "tag-fe=false" >> $GITHUB_OUTPUT
+          else
+            echo "tag-fe=true" >> $GITHUB_OUTPUT
+          fi
+          
+          skip_be_acceptance=$(grep -oP '(?<=skip-be=)[a-zA-Z]+' skip_acceptance.txt)
+          skip_be_e2e=$(grep -oP '(?<=skip-be=)[a-zA-Z]+' skip_e2e.txt)
+
+          if [[ "$skip_be_acceptance" == "true" || "$skip_be_e2e" == "true" ]]; then
+            echo "tag-be=false" >> $GITHUB_OUTPUT
+          else
+            echo "tag-be=true" >> $GITHUB_OUTPUT
+          fi
   on-acceptance-success-tag-fe:
     needs:
       - run-acceptance-environment
       - run-e2e-environment
+      - tag-update-check
+    if: needs.tag-update-check.outputs.tag-fe == 'true'
     uses: ./.github/workflows/update-tag.yml
     with:
       image-tag: latest
@@ -34,6 +73,8 @@ jobs:
     needs:
       - run-acceptance-environment
       - run-e2e-environment
+      - tag-update-check
+    if: needs.tag-update-check.outputs.tag-be == 'true'
     uses: ./.github/workflows/update-tag.yml
     with:
       image-tag: latest

@@ -11,14 +11,20 @@ on:
         type: string
       file_name:
         type: string
+      e2e:
+        description: "Check to run acceptance on end to end environment"
+        type: boolean
+        required: true
 
 env:
   REGISTRY: ghcr.io
 
 jobs:
-  checking:
+  check-last-updated:
     runs-on: ubuntu-latest
     steps:
+      - name: check e2e input value
+        run: echo "The input value is ${{ inputs.e2e }}"
       - name: Registry login
         uses: docker/login-action@v3.3.0
         with:
@@ -52,13 +58,26 @@ jobs:
           
           # Check if the image was created within the last 2 hours (7200 seconds)
           if [ $TIME_DIFF -lt 7200 ]; then
-            echo "run_further=true" >> ${{ inputs.file_name }}
+            echo "run_further=true" >> ${{ inputs.file_name }}.txt
           else
-            echo "run_further=false" >> ${{ inputs.file_name }}
+            echo "run_further=false" >> ${{ inputs.file_name}}.txt
             echo "Image was created more than 2 hours ago. No further actions."
           fi
+
+      - name: Rename File Conditionally
+        run: |
+          if [[ "${{ inputs.e2e }}" == "true" ]]; then
+            mv ${{ inputs.file_name }}.txt ${{ inputs.file_name }}_e2e.txt
+            echo "artifact_name=${{ inputs.file_name }}_e2e.txt" >> $GITHUB_ENV
+          else
+            echo "artifact_name=${{ inputs.file_name }}.txt" >> $GITHUB_ENV
+          fi
+
+
       - name: Upload File
         uses: actions/upload-artifact@v4
         with:
-            name: ${{ inputs.file_name }}
-            path: ${{ inputs.file_name }}
+          name: ${{ env.artifact_name }}
+          path: |
+            ${{ inputs.file_name }}.txt
+            ${{ inputs.file_name }}_e2e.txt
