@@ -90,7 +90,7 @@ jobs:
       - name: Determine If Deployment Should Proceed for BE
         id: determine-be
         run: |
-          if grep -q "false" $env.artifact_name_be; then
+          if grep -q "false" ${{ env.artifact_name_be }}; then
             echo "proceed-be=false" >> $GITHUB_OUTPUT
             echo "skip-be=true" >> skip.txt
             exit 0
@@ -101,7 +101,7 @@ jobs:
       - name: Determine If Deployment Should Proceed for fe
         id: determine-fe
         run: |
-          if grep -q "false" $env.artifact_name_fe; then
+          if grep -q "false" ${{ env.artifact_name_fe }}; then
             echo "proceed-fe=false" >> $GITHUB_OUTPUT
             echo "skip-fe=true" >> skip.txt
             exit 0
@@ -112,14 +112,14 @@ jobs:
 
       - name: Upload File
         uses: actions/upload-artifact@v4
-        if: ${{inputs.e2e}} == 'true'
+        if: ${{inputs.e2e}} == true
         with:
           name: skip_e2e.txt
           path: skip.txt
 
       - name: Upload File
         uses: actions/upload-artifact@v4
-        if: ${{inputs.e2e}} == 'false'
+        if: ${{inputs.e2e}} == false
         with:
           name: skip_acceptance.txt
           path: skip.txt
@@ -138,7 +138,7 @@ jobs:
       EB_ENV_BE: ${{ needs.set-environment.outputs.acc_env_be }}
 
   run-smoke-test:
-    if: ${{inputs.e2e}} == 'false'
+    if: ${{inputs.e2e}} == false
     needs:
       - run-deploy-in-environment
       - set-environment
@@ -150,7 +150,7 @@ jobs:
     secrets: inherit
 
   run-acceptance-test:
-    if: ${{inputs.e2e}} == 'false'
+    if: ${{inputs.e2e}} == false
     needs:
       - run-smoke-test
       - set-environment
@@ -160,7 +160,7 @@ jobs:
     secrets: inherit
 
   run-e2e-test:
-    if: ${{inputs.e2e}} == 'true'
+    if: ${{inputs.e2e}} == true
     needs:
       - run-smoke-test
       - set-environment
