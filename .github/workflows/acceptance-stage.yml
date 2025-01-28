@@ -31,11 +31,11 @@ jobs:
       - name: Download skip acceptance file
         uses: actions/download-artifact@v4
         with:
-          name: skip-acceptance.txt
+          name: skip_acceptance.txt
       - name: Download skip e2e file
         uses: actions/download-artifact@v4
         with:
-          name: skip-e2e.txt
+          name: skip_e2e.txt
       - name: Determine tags are needed
         id: determine
         run: |
