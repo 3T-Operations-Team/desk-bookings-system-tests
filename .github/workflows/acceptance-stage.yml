@@ -39,19 +39,19 @@ jobs:
       - name: Determine tags are needed
         id: determine
         run: |
-          proceed_fe_acceptance=$(grep -oP '(?<=skip-fe=)[a-zA-Z]+' skip_acceptance.txt)
-          proceed_fe_e2e=$(grep -oP '(?<=skip-fe=)[a-zA-Z]+' skip_e2e.txt)
+          skip_fe_acceptance=$(grep -oP '(?<=skip-fe=)[a-zA-Z]+' skip_acceptance.txt)
+          skip_fe_e2e=$(grep -oP '(?<=skip-fe=)[a-zA-Z]+' skip_e2e.txt)
           
-          if [[ "$proceed_fe_acceptance" == "false" || "$proceed_fe_e2e" == "false" ]]; then
+          if [[ "$skip_fe_acceptance" == "true" || "$skip_fe_e2e" == "true" ]]; then
             echo "tag-fe=false" >> $GITHUB_OUTPUT
           else
             echo "tag-fe=true" >> $GITHUB_OUTPUT
           fi
           
-          proceed_be_acceptance=$(grep -oP '(?<=skip-be=)[a-zA-Z]+' skip_acceptance.txt)
-          proceed_be_e2e=$(grep -oP '(?<=skip-be=)[a-zA-Z]+' skip_e2e.txt)
+          skip_be_acceptance=$(grep -oP '(?<=skip-be=)[a-zA-Z]+' skip_acceptance.txt)
+          skip_be_e2e=$(grep -oP '(?<=skip-be=)[a-zA-Z]+' skip_e2e.txt)
 
-          if [[ "$proceed_be_acceptance" == "false" || "$proceed_be_e2e" == "false" ]]; then
+          if [[ "$skip_be_acceptance" == "true" || "$skip_be_e2e" == "true" ]]; then
             echo "tag-be=false" >> $GITHUB_OUTPUT
           else
             echo "tag-be=true" >> $GITHUB_OUTPUT
