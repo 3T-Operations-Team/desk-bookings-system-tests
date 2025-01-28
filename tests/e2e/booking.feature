@@ -8,37 +8,42 @@ Feature: Employee books a desk
     And the employee is on the desk booking page
     And desk 29 is already booked by another employee
     When the employee selects desk 29
-    Then desk 29 is not selected
+    Then desk 29 cannot be selected
     And it is not possible to book desk
+
+  Scenario: Employee cannot book more than one desk for the same day
+    Given the employee is logged in
+    And the employee is on the desk booking page
+    And the employee has booked desk 27
+    When the employee selects desk 28
+    Then desk 28 cannot be selected
 
   Scenario: Employee books a desk
     Given the employee is logged in
     And the employee is on the desk booking page
+    And the employee has no desk booked
     And desk 27 is available
     When the employee selects desk 27
     And the employee books the desk
     Then the employee sees the message "Desk successfully booked"
     And desk 27 is now reserved for the employee
-  #Scenario: Emplyoee cannot book more than one desk for the same day
-  #  Given the employee is logged in
-  #  And the employee is on the Desk Booking page
-  #  And the employee has booked desk 27
-  #  When the employee selects desk 28
-  #  Then the desk 28 cannot be selected
   #Scenario: Employee books a desk on multiple days
   #  Given the employee is logged in
-  #  And the employee is on the Desk Booking page
+  #  And the employee is on the desk booking page
   #  And the employee has booked desk 27
-  #  When the employee books desk 27 for a different day
-  #  Then the employee sees a confirmation message
-  #  And desk 7 is now reserved for the employee
-  #Scenario: Employee cancels a booking
-  #  Given the employee is logged in
-  #  And the employee is on the Desk Booking page
-  #  And the employee has booked desk 27
-  #  When the employee cancels the booking
-  #  Then the employee sees a cancellation message
-  #  And desk 27 is no longer reserved for the employee
+  #  When the employee selects a different day
+  #  And the employee selects desk 27
+  #  And the employee books the desk
+  #  Then the employee sees the message "Desk successfully booked"
+  #  And desk 27 is now reserved for the employee
+
+  Scenario: Employee cancels a booking
+    Given the employee is logged in
+    And the employee is on the desk booking page
+    And the employee has booked desk 27
+    When the employee cancels the booking
+    Then the employee sees the message "Booking canceled"
+    And desk 27 is available
   #Scenario: Display all seats for the office
   #  Given the employee is logged in
   #  When the employee is on the Desk Booking page
@@ -57,8 +62,9 @@ Feature: Employee books a desk
   #  And the employee is on the Desk Booking page
   #  When the employee attempts to book a desk in the past
   #  Then the employee cannot select a date in the past
-  #Scenario: Employee navigates to My Bookings
-  #  Given the employee is logged in
-  #  And the employee is on the Desk Booking page
-  #  When the employee navigates to the Desk Booking page
-  #  Then the employee can see the Desk Booking page
+
+  Scenario: Employee navigates to My Bookings
+    Given the employee is logged in
+    And the employee is on the desk booking page
+    When the employee navigates to My Bookings page
+    Then the employee is in My Bookings page
