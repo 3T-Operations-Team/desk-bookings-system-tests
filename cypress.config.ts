@@ -20,7 +20,6 @@ async function setupNodeEvents(
 export default defineConfig({
   e2e: {
     specPattern: ["**/*.feature", "**/*.cy.ts"],
-    supportFile: false,
     setupNodeEvents,
   },
 });

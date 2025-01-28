@@ -1,5 +1,6 @@
 import dayjs from "dayjs";
 import { clickPageElement } from "./general.js";
+import { currentDate } from "../../cypress/support/e2e.js";
 
 export const getDesk = (deskName: string) => {
   return cy.get(".desk").contains(deskName);
@@ -35,7 +36,7 @@ export const bookDeskForAnotherEmployee = (deskNbr: number) => {
       },
       body: JSON.stringify({
         deskId: deskNbr,
-        date: dayjs().format("YYYY-MM-DD"),
+        date: dayjs(currentDate).format("YYYY-MM-DD"),
       }),
     },
   );
