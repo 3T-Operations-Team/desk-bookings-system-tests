@@ -64,18 +64,20 @@ jobs:
             echo "Image was created more than 2 hours ago. No further actions."
           fi
 
-      - name: Upload File
-        uses: actions/upload-artifact@v4
-        if: ${{ inputs.e2e == 'true' }}
-        with:
-            name: ${{ inputs.file_name }}_e2e.txt
-            path: ${{ inputs.file_name }}.txt
-            overwrite: true
+      - name: Rename File Conditionally
+        run: |
+          if [[ "${{ inputs.e2e }}" == "true" ]]; then
+            mv ${{ inputs.file_name }}.txt ${{ inputs.file_name }}_e2e.txt
+            echo "artifact_name=${{ inputs.file_name }}_e2e.txt" >> $GITHUB_ENV
+          else
+            echo "artifact_name=${{ inputs.file_name }}.txt" >> $GITHUB_ENV
+          fi
+
 
       - name: Upload File
         uses: actions/upload-artifact@v4
-        if: ${{ inputs.e2e == 'false' }}
         with:
-          name: ${{ inputs.file_name }}.txt
-          path: ${{ inputs.file_name }}.txt
-          overwrite: true
+          name: ${{ env.artifact_name }}
+          path: |
+            ${{ inputs.file_name }}.txt
+            ${{ inputs.file_name }}_e2e.txt
