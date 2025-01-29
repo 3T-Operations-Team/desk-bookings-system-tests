@@ -1,9 +1,13 @@
+export const getType = (type: string, exactText: string) => {
+  return cy.get(type).contains(new RegExp("^" + exactText + "$", "g"));
+};
+
 export const getPageElement = (text: string) => {
-  return cy.get(".contents").contains(text);
+  return getType(".contents", text);
 };
 
 export const getButton = (text: string) => {
-  return cy.get("button").contains(text);
+  return getType("button", text);
 };
 
 export const clickPageElement = (text: string) => {

@@ -1,9 +1,15 @@
 import dayjs from "dayjs";
-import { clickPageElement, getPageElement } from "./general.js";
+import {
+  clickButton,
+  clickPageElement,
+  getButton,
+  getPageElement,
+  getType,
+} from "./general.js";
 import { currentDate } from "../../cypress/support/e2e.js";
 
 export const getDesk = (deskName: string) => {
-  return cy.get(".desk").contains(deskName);
+  return getType(".desk", deskName);
 };
 
 export const clickOnDesk = (deskName: string) => {
@@ -11,13 +17,11 @@ export const clickOnDesk = (deskName: string) => {
 };
 
 export const clickBookingButton = () => {
-  getPageElement("Book").should("be.enabled");
-  clickPageElement("Book");
+  clickButton("Book");
 };
 
 export const clickCancelBookingButton = () => {
-  getPageElement("Cancel Booking").should("be.enabled");
-  clickPageElement("Cancel Booking");
+  clickButton("Cancel Booking");
 };
 
 export const bookDesk = (deskName: string) => {
@@ -45,10 +49,10 @@ export const bookDeskForAnotherEmployee = (deskNbr: number) => {
 };
 
 export const selectCalendarDay = (day: number) => {
-  cy.get("button").contains(day).click();
+  getButton(day.toString()).click();
 };
 
 export const selectCalendarYear = (year: number) => {
   cy.get(".MuiPickersCalendarHeader-label").click();
-  cy.get(".MuiPickersYear-root").contains(year).click();
+  getType(".MuiPickersYear-root", year.toString()).click();
 };
