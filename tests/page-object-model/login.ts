@@ -12,11 +12,12 @@ export const fillEmailField = () => {
 export const fillPasswordField = () => {
   cy.get('input[placeholder="Password"]').type(
     Cypress.env("TEST_USER_PASSWORD"),
+    { log: false },
   );
 };
 
 export const clickLoginButton = () => {
-  getButton("Login").click();
+  cy.get("button").contains("Login").click();
 };
 
 export const manualLogin = () => {
