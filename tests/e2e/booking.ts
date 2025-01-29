@@ -9,11 +9,7 @@ import {
   clickOnDesk,
   getDesk,
 } from "../page-object-model/booking.js";
-import {
-  clickButton,
-  clickPageElement,
-  getPageElement,
-} from "../page-object-model/general.js";
+import { clickButton, getPageElement } from "../page-object-model/general.js";
 
 Given("the employee is logged in", setLoginCredentials);
 

@@ -7,7 +7,7 @@ export const getButton = (text: string) => {
 };
 
 export const clickPageElement = (text: string) => {
-  getPageElement(text).click();
+  getPageElement(text).click({ force: true });
 };
 
 export const clickButton = (text: string) => {
