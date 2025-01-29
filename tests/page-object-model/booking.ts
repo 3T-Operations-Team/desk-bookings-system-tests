@@ -1,11 +1,5 @@
 import dayjs from "dayjs";
-import {
-  clickButton,
-  clickPageElement,
-  getButton,
-  getPageElement,
-  getType,
-} from "./general.js";
+import { clickButton, getButton, getType } from "./general.js";
 import { currentDate } from "../../cypress/support/e2e.js";
 
 export const getDesk = (deskName: string) => {

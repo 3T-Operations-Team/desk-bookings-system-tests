@@ -11,22 +11,21 @@ Feature: Employee books a desk
     Then desk 29 cannot be selected
     And it is not possible to book desk
 
+  Scenario: Employee books a desk
+    Given the employee is logged in
+    And the employee is on the desk booking page
+    And desk 27 is available
+    When the employee selects desk 27
+    And the employee books the desk
+    Then the employee sees the message "Desk successfully booked"
+    And desk 27 is now reserved for the employee
+
   Scenario: Employee cannot book more than one desk for the same day
     Given the employee is logged in
     And the employee is on the desk booking page
     And the employee has booked desk 27
     When the employee selects desk 28
     Then desk 28 cannot be selected
-
-  Scenario: Employee books a desk
-    Given the employee is logged in
-    And the employee is on the desk booking page
-    And the employee has no desk booked
-    And desk 27 is available
-    When the employee selects desk 27
-    And the employee books the desk
-    Then the employee sees the message "Desk successfully booked"
-    And desk 27 is now reserved for the employee
   #Scenario: Employee books a desk on multiple days
   #  Given the employee is logged in
   #  And the employee is on the desk booking page
