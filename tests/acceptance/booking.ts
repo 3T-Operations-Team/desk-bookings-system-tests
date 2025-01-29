@@ -25,7 +25,6 @@ Given("desk {int} is available", (deskNbr: number) => {
 });
 
 Given("the employee has booked desk {int}", (deskNbr: number) => {
-  bookDesk("Flex " + deskNbr);
   getDesk("Flex " + deskNbr).should("have.class", "booked");
 });
 
