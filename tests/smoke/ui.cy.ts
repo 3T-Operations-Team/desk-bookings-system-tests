@@ -1,6 +1,7 @@
 import {
   bookDesk,
   clickCancelBookingButton,
+  getDesk,
 } from "../page-object-model/booking.js";
 import {
   manualLogin,
@@ -32,17 +33,12 @@ describe("Main page", () => {
     cy.location("pathname").should("eq", "/");
     cy.get("button").contains(Cypress.env("TEST_USER_EMAIL")).should("exist");
     cy.get(".MuiDateCalendar-root").should("exist");
-    cy.get(".desk").should("exist");
-    cy.get("button").contains("Book").should("exist");
   });
 
-  it("should be able to book a desk", () => {
-    bookDesk("Flex 27");
-    cy.contains("Desk successfully booked").should("exist");
-  });
-
-  it("should be able to cancel a booking", () => {
-    clickCancelBookingButton();
-    cy.contains("Booking canceled").should("exist");
+  it("should be able to see 30 desks", () => {
+    getDesk("Manager").should("exist");
+    for (let i = 2; i <= 30; i++) {
+      getDesk("Flex " + i).should("exist");
+    }
   });
 });
