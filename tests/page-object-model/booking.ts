@@ -1,5 +1,5 @@
 import dayjs from "dayjs";
-import { clickPageElement } from "./general.js";
+import { clickPageElement, getPageElement } from "./general.js";
 import { currentDate } from "../../cypress/support/e2e.js";
 
 export const getDesk = (deskName: string) => {
@@ -11,10 +11,12 @@ export const clickOnDesk = (deskName: string) => {
 };
 
 export const clickBookingButton = () => {
+  getPageElement("Book").should("be.enabled");
   clickPageElement("Book");
 };
 
 export const clickCancelBookingButton = () => {
+  getPageElement("Cancel Booking").should("be.enabled");
   clickPageElement("Cancel Booking");
 };
 
