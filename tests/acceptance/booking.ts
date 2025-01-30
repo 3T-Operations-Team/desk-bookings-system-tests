@@ -86,3 +86,7 @@ Then("the employee is in My Bookings page", () => {
 Then("day {int} is not selected", (day: number) => {
   getButton(day.toString()).should("not.have.class", "Mui-selected");
 });
+
+Then("desk {int} should be special", (deskNbr: number) => {
+  getDesk("Flex " + deskNbr).should("have.class", "special");
+});
