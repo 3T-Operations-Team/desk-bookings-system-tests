@@ -60,15 +60,22 @@ Feature: Employee books a desk
     And the employee is on the desk booking page
     When the employee attempts to select the permanently reserved desk Manager
     Then desk Manager cannot be selected
-  #Scenario: Show height adjustable desks
-  #  Given the employee is logged in
-  #  When the employee is on the desk booking page
-  #  Then height adjustable desks are shown in "red"
-  #Scenario: Employee cannot book a desk in the past
-  #  Given the employee is logged in
-  #  And the employee is on the desk booking page
-  #  When the employee selects day 10
-  #  Then date is not selected
+
+  Scenario: Show height adjustable desks
+    Given the employee is logged in
+    When the employee is on the desk booking page
+    Then desk 6 should be special
+    And desk 11 should be special
+    And desk 15 should be special
+    And desk 24 should be special
+    And desk 27 should be special
+    And desk 28 should be special
+
+  Scenario: Employee cannot book a desk in the past
+    Given the employee is logged in
+    And the employee is on the desk booking page
+    When the employee selects day 10 in the past
+    Then day 10 is not selected
 
   Scenario: Employee navigates to My Bookings
     Given the employee is logged in

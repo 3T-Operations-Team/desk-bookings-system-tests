@@ -9,7 +9,11 @@ import {
   getDesk,
   selectCalendarDay,
 } from "../page-object-model/booking.js";
-import { clickButton, getPageElement } from "../page-object-model/general.js";
+import {
+  clickButton,
+  getButton,
+  getPageElement,
+} from "../page-object-model/general.js";
 
 Given("the employee is logged in", setLoginCredentials);
 
@@ -47,6 +51,10 @@ When("the employee selects day {int}", (day: number) => {
   selectCalendarDay(day);
 });
 
+When("the employee selects day {int} in the past", (day: number) => {
+  selectCalendarDay(day, true);
+});
+
 When("the employee navigates to My Bookings page", () => {
   clickButton("My Bookings");
 });
@@ -75,4 +83,10 @@ Then("the employee is in My Bookings page", () => {
   cy.location("pathname").should("eq", "/myBookings");
 });
 
-Then("date is not selected", () => {});
+Then("day {int} is not selected", (day: number) => {
+  getButton(day.toString()).should("not.have.class", "Mui-selected");
+});
+
+Then("desk {int} should be special", (deskNbr: number) => {
+  getDesk("Flex " + deskNbr).should("have.class", "special");
+});
