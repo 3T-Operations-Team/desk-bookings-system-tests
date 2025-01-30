@@ -1,6 +1,12 @@
 [
   {
-    "username": "test@example.com",
+    "username": "test1@example.com",
+    "password": "{noop}123",
+    "authorities": [],
+    "_class": "com.example.doesnotexist.desk_bookings_server.model.User"
+  },
+  {
+    "username": "test2@example.com",
     "password": "{noop}123",
     "authorities": [],
     "_class": "com.example.doesnotexist.desk_bookings_server.model.User"

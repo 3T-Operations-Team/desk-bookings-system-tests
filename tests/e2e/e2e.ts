@@ -1,9 +1,4 @@
-import {
-  When,
-  Then,
-  Given,
-  Before,
-} from "@badeball/cypress-cucumber-preprocessor";
+import { Given, Before } from "@badeball/cypress-cucumber-preprocessor";
 
 Before(() => {
   window.localStorage.setItem("logedUserEmail", Cypress.env("TEST_USER_EMAIL"));

@@ -39,9 +39,11 @@ jobs:
         env:
           CYPRESS_HOST: http://localhost:7070
           CYPRESS_BE_HOST: http://localhost:8080
-          CYPRESS_TEST_USER_EMAIL: test@example.com
-          CYPRESS_TEST_USER_TOKEN: Basic dGVzdEBleGFtcGxlLmNvbToxMjM=
+          CYPRESS_TEST_USER_EMAIL: test1@example.com
+          CYPRESS_TEST_USER_TOKEN: Basic dGVzdDFAZXhhbXBsZS5jb206MTIz
           CYPRESS_TEST_USER_PASSWORD: 123
+          CYPRESS_TEST_USER_1_EMAIL: test2@example.com
+          CYPRESS_TEST_USER_1_TOKEN: Basic dGVzdDJAZXhhbXBsZS5jb206MTIz
           CYPRESS_SENDGRID_HOST: ${{ vars.SENDGRID_HOST_MOCK }}
           LIBGL_ALWAYS_SOFTWARE: 1
 
