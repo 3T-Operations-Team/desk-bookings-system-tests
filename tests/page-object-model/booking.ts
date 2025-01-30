@@ -42,8 +42,8 @@ export const bookDeskForAnotherEmployee = (deskNbr: number) => {
   );
 };
 
-export const selectCalendarDay = (day: number) => {
-  getButton(day.toString()).click();
+export const selectCalendarDay = (day: number, force: boolean = false) => {
+  getButton(day.toString()).click({ force: force });
 };
 
 export const selectCalendarYear = (year: number) => {
