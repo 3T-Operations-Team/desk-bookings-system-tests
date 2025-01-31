@@ -2,7 +2,7 @@ import { When, Then, Given } from "@badeball/cypress-cucumber-preprocessor";
 import { setLoginCredentials } from "../page-object-model/login.js";
 import { goToMainPage } from "../page-object-model/navigation.js";
 import {
-  bookDeskForAnotherEmployee,
+  bookDeskForEmployeeFetch,
   clickBookingButton,
   clickCancelBookingButton,
   clickOnDesk,
@@ -20,7 +20,7 @@ Given("the employee is logged in", setLoginCredentials);
 Given("the employee is on the desk booking page", goToMainPage);
 
 Given("desk {int} is already booked by another employee", (deskNbr: number) => {
-  bookDeskForAnotherEmployee(deskNbr);
+  bookDeskForEmployeeFetch(deskNbr);
   getDesk("Flex " + deskNbr).should("not.have.class", "available");
 });
 
