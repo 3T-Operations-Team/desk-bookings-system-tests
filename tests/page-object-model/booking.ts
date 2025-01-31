@@ -23,20 +23,23 @@ export const bookDesk = (deskName: string) => {
   clickBookingButton();
 };
 
-export const bookDeskForAnotherEmployee = (deskNbr: number) => {
+export const bookDeskForEmployeeFetch = (
+  deskNbr: number,
+  userEmailEnv: string = "TEST_USER_1_EMAIL",
+  userTokenEnv: string = "TEST_USER_1_TOKEN",
+  date: number = currentDate,
+) => {
   fetch(
-    Cypress.env("BE_HOST") +
-      "/api/booking?email=" +
-      Cypress.env("TEST_USER_1_EMAIL"),
+    Cypress.env("BE_HOST") + "/api/booking?email=" + Cypress.env(userEmailEnv),
     {
       method: "POST",
       headers: {
-        Authorization: Cypress.env("TEST_USER_1_TOKEN"),
+        Authorization: Cypress.env(userTokenEnv),
         "Content-Type": "application/json",
       },
       body: JSON.stringify({
         deskId: deskNbr,
-        date: dayjs(currentDate).format("YYYY-MM-DD"),
+        date: dayjs(date).format("YYYY-MM-DD"),
       }),
     },
   );

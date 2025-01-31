@@ -17,3 +17,11 @@ export const clickPageElement = (text: string) => {
 export const clickButton = (text: string) => {
   getButton(text).click();
 };
+
+export const getCheckboxes = () => {
+  return cy.get(":checkbox");
+};
+
+export const getByTestId = (testId: string) => {
+  return cy.get('[data-testid="' + testId + '"]');
+};
