@@ -20,6 +20,9 @@ jobs:
           CYPRESS_HOST: http://${{ inputs.EB_ENV }}.${{ secrets.AWS_REGION }}.elasticbeanstalk.com
           CYPRESS_TEST_USER_EMAIL: ${{ secrets.CYPRESS_TEST_USER_EMAIL }}
           CYPRESS_TEST_USER_TOKEN: ${{ secrets.CYPRESS_TEST_USER_TOKEN }}
+          CYPRESS_TEST_USER_PASSWORD: ${{ secrets.CYPRESS_TEST_USER_PASSWORD }}
+          CYPRESS_TEST_USER_1_EMAIL: ${{ secrets.CYPRESS_TEST_USER_1_EMAIL }}
+          CYPRESS_TEST_USER_1_TOKEN: ${{ secrets.CYPRESS_TEST_USER_1_TOKEN }}
           LIBGL_ALWAYS_SOFTWARE: 1
         with:
           spec: tests/e2e/*

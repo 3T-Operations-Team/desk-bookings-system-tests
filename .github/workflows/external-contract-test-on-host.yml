@@ -1,4 +1,4 @@
-name: Acceptance Tests
+name: External Contract Tests
 on:
   workflow_call:
     inputs:
@@ -18,14 +18,11 @@ jobs:
         uses: cypress-io/github-action@v6
         env:
           CYPRESS_HOST: http://${{ inputs.EB_ENV }}.${{ secrets.AWS_REGION }}.elasticbeanstalk.com
-          CYPRESS_TEST_USER_EMAIL: ${{ secrets.CYPRESS_TEST_USER_EMAIL }}
-          CYPRESS_TEST_USER_TOKEN: ${{ secrets.CYPRESS_TEST_USER_TOKEN }}
-          CYPRESS_TEST_USER_PASSWORD: ${{ secrets.CYPRESS_TEST_USER_PASSWORD }}
-          CYPRESS_TEST_USER_1_EMAIL: ${{ secrets.CYPRESS_TEST_USER_1_EMAIL }}
-          CYPRESS_TEST_USER_1_TOKEN: ${{ secrets.CYPRESS_TEST_USER_1_TOKEN }}
+          CYPRESS_SENDGRID_STUB: ${{ vars.SENDGRID_HOST_MOCK }}
+          CYPRESS_SENDGRID_REAL: ${{ vars.SENDGRID_HOST }}
           LIBGL_ALWAYS_SOFTWARE: 1
         with:
-          spec: tests/acceptance/*
+          spec: tests/external-contract/*
 
       - name: upload screenshot
         uses: actions/upload-artifact@v4

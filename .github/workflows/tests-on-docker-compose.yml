@@ -45,6 +45,8 @@ jobs:
           CYPRESS_TEST_USER_1_EMAIL: test2@example.com
           CYPRESS_TEST_USER_1_TOKEN: Basic dGVzdDJAZXhhbXBsZS5jb206MTIz
           CYPRESS_SENDGRID_HOST: ${{ vars.SENDGRID_HOST_MOCK }}
+          CYPRESS_SENDGRID_STUB: ${{ vars.SENDGRID_HOST_MOCK }}
+          CYPRESS_SENDGRID_REAL: ${{ vars.SENDGRID_HOST }}
           LIBGL_ALWAYS_SOFTWARE: 1
 
       - name: upload screenshot

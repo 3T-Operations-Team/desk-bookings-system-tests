@@ -1,8 +1,4 @@
-import {
-  bookDesk,
-  clickCancelBookingButton,
-  getDesk,
-} from "../page-object-model/booking.js";
+import { getDesk } from "../page-object-model/booking.js";
 import {
   manualLogin,
   setLoginCredentials,
