@@ -1,12 +1,13 @@
 describe("Run External System Health Checks", () => {
   it("should be able to access SendGrid", async () => {
-    const res: any = await fetch(
-      "https://" + Cypress.env("SENDGRID_HOST") + "/v3/senders",
-      {
-        headers: { Authorization: "Bearer " + Cypress.env("SENDGRID_TOKEN") },
+    cy.request({
+      url: "https://" + Cypress.env("SENDGRID_HOST") + "/v3/senders",
+      headers: {
+        authorization: "Bearer " + Cypress.env("SENDGRID_TOKEN"),
       },
-    );
-    assert.isTrue(res.status === 200);
+    }).then((res) => {
+      expect(res.status).to.eq(200);
+    });
   });
 });
 
