@@ -20,6 +20,7 @@ jobs:
           CYPRESS_HOST: http://${{ inputs.EB_ENV }}.${{ secrets.AWS_REGION }}.elasticbeanstalk.com
           CYPRESS_SENDGRID_STUB: ${{ vars.SENDGRID_HOST_MOCK }}
           CYPRESS_SENDGRID_REAL: ${{ vars.SENDGRID_HOST }}
+          CYPRESS_SENDGRID_TOKEN: ${{ vars.SENDGRID_TOKEN }}
           LIBGL_ALWAYS_SOFTWARE: 1
         with:
           spec: tests/external-contract/*
