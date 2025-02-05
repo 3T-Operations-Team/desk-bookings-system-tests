@@ -47,7 +47,7 @@ jobs:
           CYPRESS_SENDGRID_HOST: ${{ vars.SENDGRID_HOST_MOCK }}
           CYPRESS_SENDGRID_STUB: ${{ vars.SENDGRID_HOST_MOCK }}
           CYPRESS_SENDGRID_REAL: ${{ vars.SENDGRID_HOST }}
-          CYPRESS_SENDGRID_TOKEN: ${{ vars.SENDGRID_TOKEN }}
+          CYPRESS_SENDGRID_TOKEN: ${{ secrets.SENDGRID_TOKEN }}
           LIBGL_ALWAYS_SOFTWARE: 1
 
       - name: upload screenshot
