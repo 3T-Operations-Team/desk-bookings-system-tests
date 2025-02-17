@@ -1,8 +1,8 @@
 name: Acceptance Stage
 
 on:
-  schedule:
-    # - cron: "0 1/2 * * 1-5"
+  # schedule:
+  # - cron: "0 1/2 * * 1-5"
   workflow_dispatch:
 
 jobs:
